@@ -19,7 +19,7 @@ function Login() {
     }
   };
 
-  // Redirect to the board page if the user is already authenticated
+  // Redirect to the Landing page if the user is already authenticated
   useEffect(() => {
     if (user != null) {
       navigate("/landing-page");
@@ -35,10 +35,10 @@ function Login() {
 
           <button
             type="button"
-            class="google-button"
+            className="google-button"
             onClick={handleGoogleSingin}
           >
-            <span class="google-button__icon">
+            <span className="google-button__icon">
               <svg viewBox="0 0 366 372" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M125.9 10.2c40.2-13.9 85.3-13.6 125.3 1.1 22.2 8.2 42.5 21 59.9 37.1-5.8 6.3-12.1 12.2-18.1 18.3l-34.2 34.2c-11.3-10.8-25.1-19-40.1-23.6-17.6-5.3-36.6-6.1-54.6-2.2-21 4.5-40.5 15.5-55.6 30.9-12.2 12.3-21.4 27.5-27 43.9-20.3-15.8-40.6-31.5-61-47.3 21.5-43 60.1-76.9 105.4-92.4z"
@@ -61,7 +61,7 @@ function Login() {
                 />
               </svg>
             </span>
-            <span class="google-button__text">Continue with Google</span>
+            <span className="google-button__text">Continue with Google</span>
           </button>
         </div>
 

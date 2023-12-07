@@ -1,3 +1,5 @@
+<!-- @format -->
+
 ## Welcome to the Notion App
 
 This is a React-vite app
@@ -8,3 +10,7 @@ This is a React-vite app
 - cd notion_app
 - npm install
 - npm run dev
+
+### See Live
+
+- https://notion-app-mountblue-group-project.netlify.app/

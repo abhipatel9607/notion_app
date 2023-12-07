@@ -57,6 +57,7 @@
   margin-top: -10px;
   height: 40px;
   border-width: 0;
+  border: 1px solid #555;
   background: white;
   color: #737373;
   border-radius: 5px;
@@ -70,6 +71,7 @@
 
 .google-button:hover {
   box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.1);
+  background-color: #eee;
 }
 
 .google-button__icon {
@@ -86,6 +88,8 @@
 }
 
 .google-button__text {
+  font-weight: 600;
+  color: #555;
   display: inline-block;
   vertical-align: middle;
   padding: 0 24px 0 15px;
@@ -93,7 +97,7 @@
   font-family: "Roboto", arial, sans-serif;
 }
 
-.login--container{
+.login--container {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -101,8 +105,67 @@
   margin-bottom: 10px;
 }
 
-.header--buttons{
+.header--buttons {
   display: flex;
   align-items: center;
 }
 
+.create_workspace_section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.workspace_heading {
+  color: #333;
+  line-height: 1.1;
+  font-size: 50px;
+  font-weight: 600;
+  margin: 12vh 0 20px 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.workspace_para {
+  color: #333;
+  font-size: 24px;
+  margin: 1.6vh 0 24px 0;
+}
+
+.input_and_button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.input_and_button input {
+  padding: 6px 12px;
+  border: 2px solid #555;
+  border-radius: 8px;
+}
+
+.create_workspace_box {
+  display: flex;
+  gap: 8px;
+  border: 2px solid #555;
+  padding: 24px 44px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.create_workspace_btn {
+  background-color: #333;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.create_workspace_btn:hover {
+  background-color: #444;
+}
+
+.title_label {
+  color: #333;
+  font-size: 24px;
+}

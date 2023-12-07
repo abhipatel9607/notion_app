@@ -2,7 +2,6 @@ import { UserAuth } from "../firebase/authContext";
 
 function LandingPage() {
 	const { user, logOut } = UserAuth();
-	console.log(user);
 
 	const handleLogOut = async () => {
 		try {
