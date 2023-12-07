@@ -10,12 +10,12 @@
 
 .heading_one {
   line-height: 1.1;
-  font-size: 64px;
-  font-weight: 700;
-  margin-top: 20px;
-  letter-spacing: -0.04em;
+  font-size: 50px;
+  font-weight: 600;
+  margin-bottom: 20px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+
 .hero_para {
   font-size: 24px;
   font-weight: 500;
@@ -49,4 +49,52 @@
 
 .login_box img {
   width: 250px;
+}
+
+.google-button {
+  margin-top: -10px;
+  height: 40px;
+  border-width: 0;
+  background: white;
+  color: #737373;
+  border-radius: 5px;
+  white-space: nowrap;
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.05);
+  transition-property: background-color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+  padding-left: 10px;
+}
+
+.google-button:hover {
+  box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.1);
+}
+
+.google-button__icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 8px 0 8px 8px;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+}
+
+.google-button__icon--plus {
+  width: 27px;
+}
+
+.google-button__text {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 24px 0 15px;
+  font-size: 14px;
+  font-family: "Roboto", arial, sans-serif;
+}
+
+.login--container{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
