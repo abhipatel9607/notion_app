@@ -8,7 +8,6 @@ function Welcome() {
     <div className="hero_section">
       <h1 className="heading_one">
         Write, plan, share.
-        <br /> With AI at your side.
       </h1>
       <p className="hero_para">
         Notion is the connected workspace where better, faster work happens.
@@ -23,7 +22,7 @@ function Welcome() {
         className="hero_section_img"
         src={hero_img}
         alt="hero image"
-        style={{ marginTop: "50px" }}
+        style={{ marginTop: "70px" }}
       />
     </div>
   );
