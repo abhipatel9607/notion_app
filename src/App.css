@@ -1,6 +1,7 @@
 /** @format */
 
 .hero_section {
+  margin-top: 15px;
   text-align: center;
   display: flex;
   flex-direction: column;
