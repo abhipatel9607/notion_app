@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import ErrorPage from "./pages/ErrorPage";
 import Protected from "./firebase/Protected";
 import Welcome from "./pages/Welcome";
-import Notes from "./pages/Notes";
+import LandingPage from "./pages/LandingPage";
 
 const appRouter = createBrowserRouter([
 	{
@@ -22,10 +22,10 @@ const appRouter = createBrowserRouter([
 		errorElement: <ErrorPage />,
 	},
 	{
-		path: "/notes",
+		path: "/landing-page",
 		element: (
 			<Protected>
-				<Notes />
+				<LandingPage />
 			</Protected>
 		),
 	},

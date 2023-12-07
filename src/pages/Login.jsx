@@ -22,7 +22,7 @@ function Login() {
   // Redirect to the board page if the user is already authenticated
   useEffect(() => {
     if (user != null) {
-      navigate("/notes");
+      navigate("/landing-page");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -31,7 +31,7 @@ function Login() {
     <div className="login_section">
       <div className="login_box">
         <div className="login--container">
-          <h1 className="heading_one" >Log in</h1>
+          <h1 className="heading_one">Log in</h1>
 
           <button
             type="button"

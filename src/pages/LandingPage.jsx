@@ -1,6 +1,6 @@
 import { UserAuth } from "../firebase/authContext";
 
-function Notes() {
+function LandingPage() {
 	const { user, logOut } = UserAuth();
 	console.log(user);
 
@@ -26,4 +26,4 @@ function Notes() {
 	);
 }
 
-export default Notes;
+export default LandingPage;
