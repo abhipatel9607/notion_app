@@ -12,7 +12,7 @@ function Header() {
 				<img className="w-24" src={notion_logo} alt="" />
 			</Link>
 			{!isLoginPage && (
-				<div>
+				<div className="header--buttons">
 					<Link to="/login">
 						<button className="px-[12px] py-[4px] rounded-md hover:bg-gray-100 mr-2">
 							Login
