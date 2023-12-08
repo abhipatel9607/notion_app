@@ -5,20 +5,14 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 const SideNavBar = () => {
-  const { user, logOut } = UserAuth();
+  const { user } = UserAuth();
   const dispatch = useDispatch();
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
 
-  const handleLogOut = async () => {
-    try {
-      await logOut();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
 
   return (
     <>
@@ -58,7 +52,6 @@ const SideNavBar = () => {
           <ChevronsRight className="h-6 w-6" />
         </div>
       ) : null}
-      <button onClick={() => handleLogOut()}>Logout</button>
     </>
   );
 };
