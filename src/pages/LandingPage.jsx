@@ -1,5 +1,4 @@
 import SideNavBar from "../components/SideNavBar";
-
 function LandingPage() {
   return (
     <div>
