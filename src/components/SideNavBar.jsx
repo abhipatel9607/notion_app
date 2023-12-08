@@ -1,18 +1,27 @@
+/** @format */
+
 import { UserAuth } from "../firebase/authContext";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { toggleMenu } from "../utils/appSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const SideNavBar = () => {
-  const { user } = UserAuth();
+  const { user, logOut } = UserAuth();
   const dispatch = useDispatch();
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
 
-
+  const handleLogout = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -36,11 +45,15 @@ const SideNavBar = () => {
           ) : null}
         </div>
 
-        <div className="mt-4 p-2"> Create a new WorkSpace</div>
+        {/* <div className="mt-4 p-2"> Create a new WorkSpace</div> */}
+        <Link to="/create-new-workspace">
+          <button>Create a new WorkSpace</button>
+        </Link>
         <div
           className="opacity-0 group-hover/sidebar:opacity-100 transition 
         cursor-ew-resize absolute h-[100vh] w-1 bg-gray-300 right-0 top-0"
         />
+        <button onClick={handleLogout}>LogOut</button>
       </aside>
       {!isMenuOpen ? (
         <div
