@@ -1,5 +1,11 @@
 /** @format */
-
+* {
+  padding: 0;
+  margin: 0;
+}
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
 .hero_section {
   margin-top: 20px;
   text-align: center;
@@ -15,7 +21,6 @@
   font-weight: 600;
   margin-bottom: 30px;
   margin-top: -10px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .hero_para {
