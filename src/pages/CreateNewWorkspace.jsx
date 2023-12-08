@@ -24,7 +24,7 @@ function CreateNewWorkspace() {
 
   return (
     <div className="create_workspace_section">
-      <h1 className="workspace_heading">How are you planning to use Notion?</h1>
+      <h1 className="workspace_heading">What would you like to call your workspace?</h1>
       <p className="workspace_para">
         We&apos;ll streamline your setup experience accordingly.
       </p>
@@ -55,7 +55,7 @@ function CreateNewWorkspace() {
           </div>
         </div>
       </div>
-      <img src={workspace_logo} alt="" />
+      <img style={{marginTop:"10px"}} src={workspace_logo} alt="notion people" />
     </div>
   );
 }
