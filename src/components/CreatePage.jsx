@@ -6,13 +6,13 @@ const CreatePage = () => {
   const editor = useBlockNote({});
   const [inputObject, setInputObject] = React.useState();
   const [isInserted, setIsInserted] = React.useState(false);
-  const [intialBlock, setInitialBlock] = React.useState();
+  const [intialBlockId, setInitialBlockId] = React.useState();
 
 
   editor.onEditorContentChange(() => {
     const blocks = editor.topLevelBlocks;
     setInputObject(blocks);
-    setInitialBlock(blocks[0].id);
+    setInitialBlockId(blocks[0].id);
 
   });
 
@@ -51,11 +51,11 @@ const CreatePage = () => {
   }));
 
   React.useEffect(() => {
-    if (!isInserted && intialBlock) {
-      editor.insertBlocks(blocksToInsert, intialBlock, "before");
+    if (!isInserted && intialBlockId) {
+      editor.insertBlocks(blocksToInsert, intialBlockId, "before");
       setIsInserted(true);
     }
-  }, [intialBlock]);
+  }, [intialBlockId]);
 
   return (
     <div style={{ width: "90vw", marginTop: "100px", marginLeft: "100px" }}>
