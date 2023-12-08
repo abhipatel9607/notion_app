@@ -3,11 +3,13 @@ import { useState } from "react";
 import workspace_logo from "../assets/create-new-workspace-logo.png";
 import { createData } from "../firebase/firebaseServices";
 import { UserAuth } from "../firebase/authContext";
+import { useNavigate } from "react-router-dom";
 
 function CreateNewWorkspace() {
   const [newWorkspaceTitle, setNewWorkspaceTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const { user } = UserAuth();
+  const navigate = useNavigate();
 
   const handleCreateNewWorkspace = async () => {
     if (!newWorkspaceTitle) {
@@ -16,6 +18,7 @@ function CreateNewWorkspace() {
     try {
       const data = { title: newWorkspaceTitle, uid: user.uid };
       await createData(data, "workspace");
+      navigate("/landing-page");
       console.log("New Workspace Created");
     } catch (error) {
       console.error(error);
@@ -24,7 +27,9 @@ function CreateNewWorkspace() {
 
   return (
     <div className="create_workspace_section">
-      <h1 className="workspace_heading">What would you like to call your workspace?</h1>
+      <h1 className="workspace_heading">
+        What would you like to call your workspace?
+      </h1>
       <p className="workspace_para">
         We&apos;ll streamline your setup experience accordingly.
       </p>
@@ -55,7 +60,11 @@ function CreateNewWorkspace() {
           </div>
         </div>
       </div>
-      <img style={{marginTop:"10px"}} src={workspace_logo} alt="notion people" />
+      <img
+        style={{ marginTop: "10px" }}
+        src={workspace_logo}
+        alt="notion people"
+      />
     </div>
   );
 }
