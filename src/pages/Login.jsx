@@ -2,8 +2,9 @@
 
 import { UserAuth } from "../firebase/authContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import loginImage from "../assets/notion_login.png";
+import { useEffect } from "react";
+import { getAllById } from "../firebase/firebaseServices";
 
 function Login() {
   // Get the user and googleSignIn function from the authentication context
@@ -19,10 +20,19 @@ function Login() {
     }
   };
 
-  // Redirect to the Landing page if the user is already authenticated
+  async function fetchData(tableName, property, value) {
+    const data = await getAllById(tableName, property, value);
+    console.log(data);
+    if (data.length === 0) {
+      navigate("/create-new-workspace");
+    } else {
+      navigate("/landing-page");
+    }
+  }
+
   useEffect(() => {
     if (user != null) {
-      navigate("/landing-page");
+      fetchData("workspace", "uid", user.uid);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
