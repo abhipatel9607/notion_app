@@ -140,7 +140,7 @@ body {
 .input_and_button {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
   gap: 16px;
 }
 
@@ -161,6 +161,7 @@ body {
 
 .create_workspace_btn {
   background-color: #333;
+  font-size: 14px;
   color: #fff;
   padding: 6px 12px;
   border-radius: 6px;
@@ -173,4 +174,9 @@ body {
 .title_label {
   color: #333;
   font-size: 24px;
+}
+
+.error_create_workspace {
+  color: red;
+  margin-right: 20px;
 }
