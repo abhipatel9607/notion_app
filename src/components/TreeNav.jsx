@@ -1,6 +1,8 @@
-/** @format */
-
-import { useState } from "react";
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+import React, { useState } from "react";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const TreeNav = ({ node }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -11,8 +13,16 @@ const TreeNav = ({ node }) => {
 
   return (
     <div>
-      <div style={{ cursor: "pointer" }} onClick={handleToggle}>
-        {isExpanded ? "🔽" : "▶️"} {node.pageTitle}
+      <div
+        className="cursor-pointer text-gray-600 p-1 text-sm"
+        onClick={handleToggle}
+      >
+        {isExpanded ? (
+          <KeyboardArrowDownIcon sx={{ color: "grey" }} />
+        ) : (
+          <KeyboardArrowRightIcon sx={{ color: "grey" }} />
+        )}
+        {node.pageTitle}
       </div>
       {isExpanded && node.children && node.children.length > 0 && (
         <ul>

@@ -164,7 +164,7 @@ const SideNavBar = () => {
           onClick={() => toggleMenuHandler()}
           role="button"
           className="h-6 w-6  rounded-sm hover:bg-gray-50
-         absolute top-2 left-0"
+         absolute top-2 left-0 z-10"
         >
           <ChevronsRight className="h-6 w-6" />
         </div>
