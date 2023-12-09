@@ -211,5 +211,38 @@ body {
 }
 
 .create-page--container {
-  padding: 100px 25px 5px 100px;
+  width: 100vw;
+}
+
+.create-page--button-container {
+  display: flex;
+  gap: 0px;
+}
+
+.create-page-banner {
+  position: relative;
+}
+
+.create-page--banner-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.create-page--content-container {
+  padding-top: 55px;
+  padding-left: 70px;
+}
+
+.create-page--emoji-container {
+  font-size: 100px;
+  margin-left: 105px;
+  position: absolute;
+  bottom: -60px;
+}
+
+.create-page-no-banner {
+  width: 100%;
+  height: 130px;
+  position: relative;
 }
