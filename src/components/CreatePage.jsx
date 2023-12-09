@@ -38,6 +38,7 @@ const CreatePage = () => {
       };
 
       await createData(data, "pagess");
+      console.log(data)
 
       setLoading(false);
     } catch (error) {
