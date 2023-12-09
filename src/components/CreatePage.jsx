@@ -1,7 +1,11 @@
 /** @format */
 import PanoramaIcon from "@mui/icons-material/Panorama";
 import React from "react";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
+import {
+  BlockNoteView,
+  useBlockNote,
+  getDefaultReactSlashMenuItems,
+} from "@blocknote/react";
 import "@blocknote/core/style.css";
 import { useParams } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -9,17 +13,38 @@ import SaveAsIcon from "@mui/icons-material/SaveAs";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { Button, TextField } from "@mui/material";
 import { createData } from "../firebase/firebaseServices";
+import { HiOutlineDocumentAdd } from "react-icons/hi";
 
 const CreatePage = () => {
-  const editor = useBlockNote({});
-  const [inputObject, setInputObject] = React.useState();
+  
+  const [inputObject, setInputObject] = React.useState(null);
   const { workspaceId } = useParams();
   const [emoji, setEmoji] = React.useState("");
   const [banner, setBanner] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState("");
 
-  console.log(workspaceId);
+  const insertNewPage = async () => {
+    await handleSave();
+  };
+
+  const insertNewPageItem = {
+    name: "Page",
+    execute: insertNewPage,
+    aliases: ["insertpage", "ip"],
+    group: "Other",
+    icon: <HiOutlineDocumentAdd size={18} />,
+    hint: "Used to insert a new page.",
+  };
+
+  const customSlashMenuItemList = [
+    ...getDefaultReactSlashMenuItems(),
+    insertNewPageItem,
+  ];
+
+  const editor = useBlockNote({
+    slashMenuItems: customSlashMenuItemList,
+  });
 
   editor.onEditorContentChange(() => {
     const blocks = editor.topLevelBlocks;
@@ -37,8 +62,9 @@ const CreatePage = () => {
         pageTitle: title,
       };
 
+      console.log("data", data);
+
       await createData(data, "pagess");
-      console.log(data)
 
       setLoading(false);
     } catch (error) {
@@ -121,7 +147,7 @@ const CreatePage = () => {
               }}
               startIcon={<EmojiEmotionsIcon />}
             >
-              Add icon
+              {!emoji ? "Add icon" : "Shuffle icon"}
             </Button>
 
             <Button
@@ -138,12 +164,13 @@ const CreatePage = () => {
               }}
               startIcon={<PanoramaIcon />}
             >
-              Add cover
+              {!banner ? "Add cover" : "Shuffle cover"}
             </Button>
           </div>
 
           <TextField
             id="outlined-textarea"
+            value={title}
             placeholder="Untitled"
             onChange={(e) => setTitle(e.target.value)}
             multiline
