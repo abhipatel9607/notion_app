@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+/** @format */
+
+import { useState } from "react";
 
 const TreeNav = ({ node }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -17,7 +17,7 @@ const TreeNav = ({ node }) => {
       {isExpanded && node.children && node.children.length > 0 && (
         <ul>
           {node.children.map((childNode) => (
-            <li className="pl-3" key={childNode.id}>
+            <li key={childNode.pagesId} className="pl-3">
               <TreeNav node={childNode} />
             </li>
           ))}
@@ -28,12 +28,11 @@ const TreeNav = ({ node }) => {
 };
 
 export const CollapsibleTree = ({ data }) => {
-  console.log(data);
   return (
     <div className="mt-4 pl-2">
       <ul>
         {data.map((node) => (
-          <li key={node.id}>
+          <li key={node.pagesId}>
             <TreeNav node={node} />
           </li>
         ))}

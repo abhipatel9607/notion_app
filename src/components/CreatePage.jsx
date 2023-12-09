@@ -16,7 +16,6 @@ import { createData } from "../firebase/firebaseServices";
 import { HiOutlineDocumentAdd } from "react-icons/hi";
 
 const CreatePage = () => {
-  
   const [inputObject, setInputObject] = React.useState(null);
   const { workspaceId } = useParams();
   const [emoji, setEmoji] = React.useState("");
