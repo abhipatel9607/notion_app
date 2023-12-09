@@ -3,7 +3,9 @@
 import { useState } from "react";
 import createBtn from "../assets/CretateNewPage.png";
 import { UserAuth } from "../firebase/authContext";
+import FetchPage from "./FetchPage";
 import CreatePage from "./CreatePage";
+
 
 const Body = () => {
   const { user } = UserAuth();

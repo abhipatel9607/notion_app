@@ -7,50 +7,27 @@ import {
   getDefaultReactSlashMenuItems,
 } from "@blocknote/react";
 import "@blocknote/core/style.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveAsIcon from "@mui/icons-material/SaveAs";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { Button, TextField } from "@mui/material";
-
+import { createData } from "../firebase/firebaseServices";
 import { HiOutlineDocumentAdd } from "react-icons/hi";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
-import { db } from "../firebase/firebaseConfig";
 
-const CreatePage = () => {
+const FetchPage = () => {
+  const [fetchData, setFetchData] = React.useState();
   const [inputObject, setInputObject] = React.useState(null);
   const { workspaceId } = useParams();
   const [emoji, setEmoji] = React.useState("");
   const [banner, setBanner] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState("");
+  const [pageId, setPageId] = React.useState([])
 
-  const navigate = useNavigate()
 
   const insertNewPage = async () => {
     await handleSave();
-  };
-
-  const createDataWithId = async (data, tableName) => {
-    try {
-      const collectionRef = collection(db, tableName);
-      const docRef = await addDoc(collectionRef, data);
-      const docId = docRef.id;
-
-      const updatedData = {
-        ...data,
-        parentId: docId,
-      };
-
-      await updateDoc(doc(collectionRef, docId), updatedData);
-
-      navigate(`/page/${docId}`)
-
-      return updatedData;
-    } catch (error) {
-      console.error(`Error creating ${tableName} data:`, error);
-      throw error;
-    }
   };
 
   const insertNewPageItem = {
@@ -89,7 +66,7 @@ const CreatePage = () => {
 
       console.log("data", data);
 
-      await createDataWithId(data, "pagess");
+      await createData(data, "pagess");
 
       setLoading(false);
     } catch (error) {
@@ -253,4 +230,4 @@ const CreatePage = () => {
   );
 };
 
-export default CreatePage;
+export default FetchPage;

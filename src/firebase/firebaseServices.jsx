@@ -31,7 +31,6 @@ export const getAllById = async (tableName, compareProperty, compareValue) => {
   }
 };
 
-// Create a new document in a collection
 export const createData = async (data, tableName) => {
   try {
     const collectionRef = collection(db, tableName);
@@ -43,3 +42,4 @@ export const createData = async (data, tableName) => {
     return error;
   }
 };
+
