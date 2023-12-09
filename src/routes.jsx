@@ -10,6 +10,7 @@ import LandingPage from "./pages/LandingPage";
 import CreateNewWorkspace from "./pages/CreateNewWorkspace";
 import Body from "./components/Body";
 import CreatePage from "./components/CreatePage";
+import Page from "./components/Page";
 
 const appRouter = createBrowserRouter([
   {
@@ -47,6 +48,15 @@ const appRouter = createBrowserRouter([
         element: (
           <Protected>
             <CreatePage />
+          </Protected>
+        ),
+      },
+      {
+        path: "page/:pageId",
+        index: true,
+        element: (
+          <Protected>
+            <Page />
           </Protected>
         ),
       },
