@@ -16,7 +16,7 @@ function Welcome() {
     if (user != null) {
       navigate("/landing-page");
     }
-  }, [user]);
+  }, [navigate, user]);
   return (
     <div className="hero_section">
       <h1 className="heading_one ">Write, plan, share.</h1>

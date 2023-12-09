@@ -8,6 +8,8 @@ import Protected from "./firebase/Protected";
 import Welcome from "./pages/Welcome";
 import LandingPage from "./pages/LandingPage";
 import CreateNewWorkspace from "./pages/CreateNewWorkspace";
+import Body from "./components/Body";
+import CreatePage from "./components/CreatePage";
 
 const appRouter = createBrowserRouter([
   {
@@ -22,6 +24,7 @@ const appRouter = createBrowserRouter([
     ],
     errorElement: <ErrorPage />,
   },
+
   {
     path: "/landing-page",
     element: (
@@ -29,6 +32,25 @@ const appRouter = createBrowserRouter([
         <LandingPage />
       </Protected>
     ),
+    children: [
+      {
+        index: true,
+        element: (
+          <Protected>
+            <Body />
+          </Protected>
+        ),
+      },
+      {
+        path: "workspace/:workspaceId",
+        index: true,
+        element: (
+          <Protected>
+            <CreatePage />
+          </Protected>
+        ),
+      },
+    ],
   },
   {
     path: "/create-new-workspace",

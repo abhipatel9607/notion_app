@@ -1,13 +1,13 @@
 /** @format */
 
 import SideNavBar from "../components/SideNavBar";
-import Body from "../components/Body";
+import { Outlet } from "react-router-dom";
 
 function LandingPage() {
   return (
     <div className="flex">
       <SideNavBar />
-      <Body />
+      <Outlet />
     </div>
   );
 }

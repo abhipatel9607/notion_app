@@ -22,7 +22,6 @@ function Login() {
 
   async function fetchData(tableName, property, value) {
     const data = await getAllById(tableName, property, value);
-    console.log(data);
     if (data.length === 0) {
       navigate("/create-new-workspace");
     } else {
