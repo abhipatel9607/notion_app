@@ -70,8 +70,12 @@ const SideNavBar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const workspaceData = await getAllById("workspace", "uid", user.uid);
-        setWorkspace(workspaceData);
+        if (user.uid) {
+          const workspaceData = await getAllById("workspace", "uid", user.uid);
+          setWorkspace(workspaceData);
+        } else {
+          return;
+        }
       } catch (error) {
         console.error(error);
       }
@@ -83,18 +87,23 @@ const SideNavBar = () => {
     <>
       <aside
         className={`group/sidebar h-[100vh] bg-gray-200 overflow-y-auto 
-        relative flex flex-col z-[99999] ${isMenuOpen ? "w-60" : "w-0"}`}
+        relative flex flex-col z-[99999] ${isMenuOpen ? "w-80" : "w-0"}`}
+        style={{ position: "sticky", left: "0 ", top: "0" }}
       >
         <div>
-          <div className="sideBar_head" onClick={toggleDropdown}>
+          <div className="sideBar_head relative" onClick={toggleDropdown}>
             <img className="userImg" src={user.photoURL} alt="UserImg" />
             <span className="p-2">{user.displayName}</span>
             <img className="up_down_logo" src={arrow_upAndDown} alt="" />
             {isDropdownOpen && (
-              <div className="relative inline-block text-left">
+              <div className=" inline-block text-left">
                 <div
-                  className="absolute  z-10 mt-4 w-48  rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  style={{ right: "-26px" }}
+                  className="absolute  z-10 mt-4   rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  style={{
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "96%",
+                  }}
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="menu-button"
@@ -143,17 +152,11 @@ const SideNavBar = () => {
             </div>
           )}
         </div>
-
-        {/* <div className="mt-4 p-2"> Create a new WorkSpace</div> */}
-        <Link to="/create-new-workspace">
-          <button>Create a new WorkSpace</button>
-        </Link>
         <CollapsibleTree data={data}></CollapsibleTree>
         <div
           className="opacity-0 group-hover/sidebar:opacity-100 transition 
         cursor-ew-resize absolute h-[100vh] w-1 bg-gray-300 right-0 top-0"
         />
-        <button onClick={handleLogout}>LogOut</button>
       </aside>
 
       {!isMenuOpen ? (

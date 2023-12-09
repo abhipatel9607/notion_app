@@ -19,8 +19,6 @@ const CreatePage = () => {
   const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState("");
 
-  console.log(workspaceId);
-
   editor.onEditorContentChange(() => {
     const blocks = editor.topLevelBlocks;
     setInputObject(blocks);
@@ -38,7 +36,6 @@ const CreatePage = () => {
       };
 
       await createData(data, "pagess");
-      console.log(data)
 
       setLoading(false);
     } catch (error) {
