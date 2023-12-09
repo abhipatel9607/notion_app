@@ -14,12 +14,12 @@ function CreateNewWorkspace() {
   const handleCreateNewWorkspace = async () => {
     if (!newWorkspaceTitle) {
       setErrorMessage("Title Required*");
+      return;
     }
     try {
       const data = { title: newWorkspaceTitle, uid: user.uid };
       await createData(data, "workspace");
       navigate("/landing-page");
-      console.log("New Workspace Created");
     } catch (error) {
       console.error(error);
     }
@@ -45,7 +45,6 @@ function CreateNewWorkspace() {
             }}
           />
           <div>
-            {" "}
             {errorMessage && (
               <span className="error_create_workspace" color="red.500">
                 {errorMessage}

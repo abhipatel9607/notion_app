@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/** @format */
+
+import { useState } from "react";
 import createBtn from "../assets/CretateNewPage.png";
 import { UserAuth } from "../firebase/authContext";
 import CreatePage from "./CreatePage";

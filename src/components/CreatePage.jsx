@@ -1,19 +1,21 @@
+/** @format */
+
 import React from "react";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
 import "@blocknote/core/style.css";
+import { useParams } from "react-router-dom";
 
 const CreatePage = () => {
   const editor = useBlockNote({});
   const [inputObject, setInputObject] = React.useState();
   const [isInserted, setIsInserted] = React.useState(false);
   const [intialBlockId, setInitialBlockId] = React.useState();
-
+  const { workspaceId } = useParams();
 
   editor.onEditorContentChange(() => {
     const blocks = editor.topLevelBlocks;
     setInputObject(blocks);
     setInitialBlockId(blocks[0].id);
-
   });
 
   const object = [
@@ -66,6 +68,7 @@ const CreatePage = () => {
       >
         Save
       </button>
+      <p>WorkspaceId:{workspaceId}</p>
     </div>
   );
 };

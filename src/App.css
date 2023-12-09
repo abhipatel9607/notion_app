@@ -181,3 +181,22 @@ body {
   color: red;
   margin-right: 20px;
 }
+
+.userImg {
+  width: 24px;
+  height: 24px;
+
+  border-radius: 4px;
+}
+
+.sideBar_head {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+.up_down_logo {
+  width: 20px;
+  margin-left: -6px;
+}
