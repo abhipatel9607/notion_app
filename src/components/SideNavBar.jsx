@@ -4,18 +4,32 @@ import arrow_upAndDown from "../assets/arrow_updown.png";
 import { UserAuth } from "../firebase/authContext";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { toggleMenu } from "../utils/appSlice";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getAllById } from "../firebase/firebaseServices";
 import { CollapsibleTree } from "./TreeNav";
+import { useDispatch, useSelector } from "react-redux";
+import { setWorkspace } from "../utils/workspaceSlice";
+import { useNavigate } from "react-router-dom";
+import { setActiveWorkspace } from "../utils/activeWorkspaceSlice";
 
 const SideNavBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [workspace, setWorkspace] = useState([]);
+  // const [workspace, setWorkspace] = useState([]);
   const { user, logOut } = UserAuth();
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
   const dispatch = useDispatch();
+  const workspace = useSelector((state) => state.workspace);
+  const activeWorkspace = useSelector((state) => state.activeWorkspace);
+  const navigate = useNavigate();
+  console.log(activeWorkspace);
+
+  // Inside your component
+  const handleActiveWorkspace = (id) => {
+    console.log(id);
+    setIsDropdownOpen(false);
+    dispatch(setActiveWorkspace(id));
+    navigate(`workspace/${id}`);
+  };
 
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
@@ -72,7 +86,9 @@ const SideNavBar = () => {
       try {
         if (user.uid) {
           const workspaceData = await getAllById("workspace", "uid", user.uid);
-          setWorkspace(workspaceData);
+          // setWorkspace(workspaceData);
+          console.log(workspaceData);
+          dispatch(setWorkspace(workspaceData));
         } else {
           return;
         }
@@ -113,14 +129,16 @@ const SideNavBar = () => {
                       workspace.map((workspace) => (
                         <div
                           key={workspace.workspaceId}
-                          onClick={() => setIsDropdownOpen(false)}
+                          onClick={() =>
+                            handleActiveWorkspace(workspace.workspaceId)
+                          }
+                          className={`text-gray-700 block px-4 py-2 text-sm ${
+                            activeWorkspace === workspace.workspaceId
+                              ? "bgRed"
+                              : ""
+                          }`}
                         >
-                          <Link
-                            to={`workspace/${workspace.workspaceId}`}
-                            className="text-gray-700 block px-4 py-2 text-sm"
-                          >
-                            {workspace.title}
-                          </Link>
+                          {workspace.title}
                         </div>
                       ))}
 

@@ -246,3 +246,7 @@ body {
   height: 130px;
   position: relative;
 }
+
+.bgRed {
+  background-color: lightgray;
+}
