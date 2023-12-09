@@ -3,9 +3,8 @@
 import { useState } from "react";
 import createBtn from "../assets/CretateNewPage.png";
 import { UserAuth } from "../firebase/authContext";
-import FetchPage from "./FetchPage";
 import CreatePage from "./CreatePage";
-
+import Page from "./Page";
 
 const Body = () => {
   const { user } = UserAuth();
@@ -24,7 +23,7 @@ const Body = () => {
       </button>
     </div>
   ) : (
-    <CreatePage />
+    <Page />
   );
 };
 

@@ -15,7 +15,7 @@ import { Button, TextField } from "@mui/material";
 import { createData } from "../firebase/firebaseServices";
 import { HiOutlineDocumentAdd } from "react-icons/hi";
 
-const FetchPage = () => {
+const Page = () => {
   const [fetchData, setFetchData] = React.useState();
   const [inputObject, setInputObject] = React.useState(null);
   const { workspaceId } = useParams();
@@ -230,4 +230,4 @@ const FetchPage = () => {
   );
 };
 
-export default FetchPage;
+export default Page;
