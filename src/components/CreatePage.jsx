@@ -8,12 +8,10 @@ const CreatePage = () => {
   const [isInserted, setIsInserted] = React.useState(false);
   const [intialBlockId, setInitialBlockId] = React.useState();
 
-
   editor.onEditorContentChange(() => {
     const blocks = editor.topLevelBlocks;
     setInputObject(blocks);
     setInitialBlockId(blocks[0].id);
-
   });
 
   const object = [

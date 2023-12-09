@@ -1,11 +1,13 @@
 /** @format */
-
+import { useEffect, useState } from "react";
 import { UserAuth } from "../firebase/authContext";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { toggleMenu } from "../utils/appSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getAllById } from "../firebase/firebaseServices";
+import { CollapsibleTree } from "./TreeNav";
 
 const SideNavBar = () => {
   const { user, logOut } = UserAuth();
@@ -14,6 +16,40 @@ const SideNavBar = () => {
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await getAllById(
+          "pages",
+          "workspaceId",
+          "3lakknCMmwQ49UUmAr1yhNL1gd03"
+        );
+
+        const idToNodeMap = {};
+        // Create a mapping from id to node
+        result.forEach((node) => {
+          idToNodeMap[node.pagesId] = node;
+          node.children = [];
+        });
+        // Build the tree structure
+        const rootNodes = [];
+        result.forEach((node) => {
+          if (node.parentId) {
+            // If the node has a parent, add it to the parent's children
+            idToNodeMap[node.parentId].children.push(node);
+          } else {
+            // If the node has no parent, it is a root node
+            rootNodes.push(node);
+          }
+        });
+        setData(rootNodes);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -49,6 +85,7 @@ const SideNavBar = () => {
         <Link to="/create-new-workspace">
           <button>Create a new WorkSpace</button>
         </Link>
+        <CollapsibleTree data={data}></CollapsibleTree>
         <div
           className="opacity-0 group-hover/sidebar:opacity-100 transition 
         cursor-ew-resize absolute h-[100vh] w-1 bg-gray-300 right-0 top-0"
