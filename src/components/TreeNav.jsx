@@ -3,12 +3,17 @@
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { useNavigate } from "react-router-dom";
 
 const TreeNav = ({ node }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
+  };
+  const navigateToPage = (pageId) => {
+    navigate("page/" + pageId);
   };
 
   return (
@@ -22,7 +27,9 @@ const TreeNav = ({ node }) => {
         ) : (
           <KeyboardArrowRightIcon sx={{ color: "grey" }} />
         )}
-        {node.pageTitle}
+        <span onClick={() => navigateToPage(node.pagesId)}>
+          {node.pageTitle}
+        </span>
       </div>
       {isExpanded && node.children && node.children.length > 0 && (
         <ul>
