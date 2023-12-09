@@ -3,6 +3,7 @@
   padding: 0;
   margin: 0;
 }
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -199,4 +200,16 @@ body {
 .up_down_logo {
   width: 20px;
   margin-left: -6px;
+}
+
+.create-page--input {
+  margin-left: 55px;
+  border: 1px solid black;
+  width: 60vw;
+  font-size: 50px;
+  overflow-wrap: break-word;
+}
+
+.create-page--container {
+  padding: 100px 25px 5px 100px;
 }
