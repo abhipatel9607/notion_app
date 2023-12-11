@@ -44,6 +44,8 @@ const CreatePage = () => {
 
       await updateDoc(doc(collectionRef, docId), updatedData);
 
+      navigate(`/landing-page/page/${docId}`)
+
       return updatedData;
     } catch (error) {
       console.error(`Error creating ${tableName} data:`, error);

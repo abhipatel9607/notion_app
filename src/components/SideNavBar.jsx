@@ -105,7 +105,7 @@ const SideNavBar = () => {
       }
     };
     fetchData();
-  }, [user]);
+  }, []);
 
   return (
     <>
