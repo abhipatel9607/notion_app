@@ -36,8 +36,57 @@ const CreatePage = () => {
   const activeWorkspace = useSelector((state) => state.activeWorkspace);
 
   const insertNewPage = async () => {
-    await handleSave("");
+    await handleSave();
   };
+
+  const autosaveTimeoutRef = React.useRef(null);
+
+  const autosave = async () => {
+    try {
+      const data = {
+        workspaceId: activeWorkspace,
+        content: JSON.stringify(inputObject),
+        headerEmoji: emoji,
+        banner: banner,
+        pageTitle: title,
+        parentId: "",
+        childPages: [],
+        children: [],
+      };
+
+      await createDataWithId(data, "pages");
+
+      console.log("Autosaved!");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const resetAutosaveTimeout = () => {
+    clearTimeout(autosaveTimeoutRef.current);
+
+    autosaveTimeoutRef.current = setTimeout(autosave, 5000);
+  };
+
+  React.useEffect(() => {
+    resetAutosaveTimeout();
+    return () => clearTimeout(autosaveTimeoutRef.current);
+  }, [inputObject, autosave]);
+
+  React.useEffect(() => {
+    const resetTimeoutOnUserActivity = () => {
+      resetAutosaveTimeout();
+    };
+
+    document.addEventListener("keydown", resetTimeoutOnUserActivity);
+    document.addEventListener("mousemove", resetTimeoutOnUserActivity);
+
+    return () => {
+      clearTimeout(autosaveTimeoutRef.current);
+      document.removeEventListener("keydown", resetTimeoutOnUserActivity);
+      document.removeEventListener("mousemove", resetTimeoutOnUserActivity);
+    };
+  }, [resetAutosaveTimeout]);
 
   const createDataWithId = async (data, tableName) => {
     try {
@@ -85,7 +134,7 @@ const CreatePage = () => {
     setInputObject(blocks);
   });
 
-  const handleSave = async (pId) => {
+  const handleSave = async () => {
     setLoading(true);
     try {
       const data = {
@@ -94,14 +143,14 @@ const CreatePage = () => {
         headerEmoji: emoji,
         banner: banner,
         pageTitle: title,
-        parentId: pId,
+        parentId: "",
         childPages: [],
         children: [],
       };
 
       console.log("data", data);
 
-      await createDataWithId(data, "pages", pId);
+      await createDataWithId(data, "pages");
 
       setLoading(false);
     } catch (error) {
@@ -237,28 +286,6 @@ const CreatePage = () => {
           />
 
           <BlockNoteView editor={editor} theme={"light"} />
-
-          <LoadingButton
-            size="small"
-            color="secondary"
-            loadingPosition="start"
-            startIcon={<SaveAsIcon />}
-            variant="contained"
-            loading={loading}
-            onClick={() => handleSave("")}
-            sx={{
-              backgroundColor: "black",
-              position: "fixed",
-              right: "60px",
-              bottom: "40px",
-              padding: "7px 10px",
-              "&:hover": {
-                backgroundColor: "black",
-              },
-            }}
-          >
-            <span>Save</span>
-          </LoadingButton>
         </div>
       </div>
     </>

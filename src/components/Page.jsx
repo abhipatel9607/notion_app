@@ -15,7 +15,7 @@ import { Button, TextField } from "@mui/material";
 import { createData } from "../firebase/firebaseServices";
 import { HiOutlineDocumentAdd } from "react-icons/hi";
 import { db } from "../firebase/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Loader from "./Loader";
@@ -58,7 +58,7 @@ const Page = () => {
     };
 
     fetchData();
-  }, []);
+  }, [pageId]);
 
   const blocksToInsert = fetchedEditorObject?.map((block) => ({
     id: block.id,
@@ -103,9 +103,56 @@ const Page = () => {
     setInputObject(blocks);
   });
 
+  const createDataWithId = async (data, tableName) => {
+    try {
+      const collectionRef = collection(db, tableName);
+      const docRef = await addDoc(collectionRef, data);
+      const docId = docRef.id;
+
+      const updatedData = {
+        ...data,
+        parentId: "",
+        createdAt: serverTimestamp(),
+      };
+
+      await updateDoc(doc(collectionRef, docId), updatedData);
+
+      navigate(`/landing-page/page/${docId}`);
+
+      return updatedData;
+    } catch (error) {
+      console.error(`Error creating ${tableName} data:`, error);
+      throw error;
+    }
+  };
+
   const handleSave = async () => {
     setLoading(true);
+    try {
+      const data = {
+        workspaceId: activeWorkspace,
+        content: JSON.stringify(inputObject),
+        headerEmoji: emoji,
+        banner: banner,
+        pageTitle: title,
+        parentId: "",
+        childPages: [],
+        children: [],
+      };
 
+      console.log("data", data);
+
+      await createDataWithId(data, "pages");
+
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const autosaveTimeoutRef = React.useRef(null);
+
+  const autosave = async () => {
     try {
       const data = {
         workspaceId: activeWorkspace,
@@ -116,11 +163,39 @@ const Page = () => {
         parentId: "",
       };
       await updateData("pages", pageId, data);
-      setLoading(false);
+
+      console.log("Autosaved!");
     } catch (error) {
       console.error(error);
     }
   };
+
+  const resetAutosaveTimeout = () => {
+    clearTimeout(autosaveTimeoutRef.current);
+
+    autosaveTimeoutRef.current = setTimeout(autosave, 5000);
+  };
+
+  React.useEffect(() => {
+    resetAutosaveTimeout();
+
+    return () => clearTimeout(autosaveTimeoutRef.current);
+  }, [inputObject, autosave]);
+
+  React.useEffect(() => {
+    const resetTimeoutOnUserActivity = () => {
+      resetAutosaveTimeout();
+    };
+
+    document.addEventListener("keydown", resetTimeoutOnUserActivity);
+    document.addEventListener("mousemove", resetTimeoutOnUserActivity);
+
+    return () => {
+      clearTimeout(autosaveTimeoutRef.current);
+      document.removeEventListener("keydown", resetTimeoutOnUserActivity);
+      document.removeEventListener("mousemove", resetTimeoutOnUserActivity);
+    };
+  }, [resetAutosaveTimeout]);
 
   const getRandomEmoji = () => {
     const emojis = ["😊", "🚀", "🌈", "🎉", "🍕", "🔥", "📚", "❤️", "🎸", "🐱"];
@@ -254,28 +329,6 @@ const Page = () => {
           />
 
           <BlockNoteView editor={editor} theme={"light"} />
-
-          <LoadingButton
-            size="small"
-            color="secondary"
-            loadingPosition="start"
-            startIcon={<SaveAsIcon />}
-            variant="contained"
-            loading={loading}
-            onClick={handleSave("pId")}
-            sx={{
-              backgroundColor: "black",
-              position: "fixed",
-              right: "60px",
-              bottom: "40px",
-              padding: "7px 10px",
-              "&:hover": {
-                backgroundColor: "black",
-              },
-            }}
-          >
-            <span>Save</span>
-          </LoadingButton>
         </div>
       </div>
     </>

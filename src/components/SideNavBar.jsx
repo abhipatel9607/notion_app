@@ -12,6 +12,8 @@ import { setWorkspace } from "../utils/workspaceSlice";
 import { useNavigate } from "react-router-dom";
 import { setActiveWorkspace } from "../utils/activeWorkspaceSlice";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import ImportContactsIcon from "@mui/icons-material/ImportContacts";
+import { Button } from "@mui/material";
 
 const SideNavBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -149,6 +151,17 @@ const SideNavBar = () => {
               </div>
             )}
           </div>
+          <div
+            style={{
+              marginLeft: "16px",
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+            }}
+          >
+            Your {workspace.length > 1 ? "Workspaces" : "Workspace"}
+          </div>
+
           {workspace &&
             workspace.map((workspace) => (
               <div
