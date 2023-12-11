@@ -22,6 +22,7 @@ const SideNavBar = () => {
   const activeWorkspace = useSelector((state) => state.activeWorkspace);
   const navigate = useNavigate();
   // console.log(activeWorkspace);
+  console.log(workspace);
 
   // Inside your component
   const handleActiveWorkspace = (id) => {
@@ -38,10 +39,12 @@ const SideNavBar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log(activeWorkspace);
+        console.log("fething");
         const result = await getAllById(
           "pages",
           "workspaceId",
-          "3lakknCMmwQ49UUmAr1yhNL1gd03"
+          activeWorkspace
         );
 
         const idToNodeMap = {};
@@ -67,7 +70,7 @@ const SideNavBar = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [activeWorkspace]);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
