@@ -34,12 +34,12 @@ export const getAllById = async (tableName, compareProperty, compareValue) => {
 export const createData = async (data, tableName) => {
   try {
     const collectionRef = collection(db, tableName);
-    await addDoc(collectionRef, {
+    const createdWorkspaceData = await addDoc(collectionRef, {
       ...data,
     });
+    return createdWorkspaceData;
   } catch (error) {
     console.error(`Error creating ${tableName} data:`, error);
     return error;
   }
 };
-

@@ -34,14 +34,14 @@ const appRouter = createBrowserRouter([
       </Protected>
     ),
     children: [
-      {
-        index: true,
-        element: (
-          <Protected>
-            <Body />
-          </Protected>
-        ),
-      },
+      // {
+      //   index: true,
+      //   element: (
+      //     <Protected>
+      //       <Body />
+      //     </Protected>
+      //   ),
+      // },
       {
         path: "workspace/:workspaceId",
         index: true,

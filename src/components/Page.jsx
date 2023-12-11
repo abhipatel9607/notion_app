@@ -23,8 +23,7 @@ const Page = () => {
   const [banner, setBanner] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState("");
-  const [pageId, setPageId] = React.useState([])
-
+  const [pageId, setPageId] = React.useState([]);
 
   const insertNewPage = async () => {
     await handleSave();
@@ -63,8 +62,6 @@ const Page = () => {
         banner: banner,
         pageTitle: title,
       };
-
-      console.log("data", data);
 
       await createData(data, "pagess");
 

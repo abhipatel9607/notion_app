@@ -4,12 +4,15 @@ import workspace_logo from "../assets/create-new-workspace-logo.png";
 import { createData } from "../firebase/firebaseServices";
 import { UserAuth } from "../firebase/authContext";
 import { useNavigate } from "react-router-dom";
+import { setActiveWorkspace } from "../utils/activeWorkspaceSlice";
+import { useDispatch } from "react-redux";
 
 function CreateNewWorkspace() {
   const [newWorkspaceTitle, setNewWorkspaceTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const { user } = UserAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleCreateNewWorkspace = async () => {
     if (!newWorkspaceTitle) {
@@ -18,8 +21,9 @@ function CreateNewWorkspace() {
     }
     try {
       const data = { title: newWorkspaceTitle, uid: user.uid };
-      await createData(data, "workspace");
-      navigate("/landing-page");
+      const createdWorkspaceData = await createData(data, "workspace");
+      dispatch(setActiveWorkspace(createdWorkspaceData.id));
+      navigate(`/landing-page/workspace/${createdWorkspaceData.id}`);
     } catch (error) {
       console.error(error);
     }

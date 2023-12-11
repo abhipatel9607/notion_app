@@ -25,7 +25,7 @@ const CreatePage = () => {
   const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const insertNewPage = async () => {
     await handleSave();
@@ -44,7 +44,7 @@ const CreatePage = () => {
 
       await updateDoc(doc(collectionRef, docId), updatedData);
 
-      navigate(`/page/${docId}`)
+      navigate(`/page/${docId}`);
 
       return updatedData;
     } catch (error) {
