@@ -7,25 +7,33 @@ import {
   getDefaultReactSlashMenuItems,
 } from "@blocknote/react";
 import "@blocknote/core/style.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveAsIcon from "@mui/icons-material/SaveAs";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { Button, TextField } from "@mui/material";
 
 import { HiOutlineDocumentAdd } from "react-icons/hi";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  updateDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import { useSelector } from "react-redux";
 
 const CreatePage = () => {
   const [inputObject, setInputObject] = React.useState(null);
-  const { workspaceId } = useParams();
   const [emoji, setEmoji] = React.useState("");
   const [banner, setBanner] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState("");
 
   const navigate = useNavigate();
+
+  const activeWorkspace = useSelector((state) => state.activeWorkspace);
 
   const insertNewPage = async () => {
     await handleSave();
@@ -40,6 +48,7 @@ const CreatePage = () => {
       const updatedData = {
         ...data,
         parentId: "",
+        createdAt: serverTimestamp(),
       };
 
       await updateDoc(doc(collectionRef, docId), updatedData);
@@ -80,7 +89,7 @@ const CreatePage = () => {
     setLoading(true);
     try {
       const data = {
-        workspaceId: workspaceId,
+        workspaceId: activeWorkspace,
         content: JSON.stringify(inputObject),
         headerEmoji: emoji,
         banner: banner,
