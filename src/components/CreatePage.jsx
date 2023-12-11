@@ -41,7 +41,6 @@ const CreatePage = () => {
 
   const autosaveTimeoutRef = React.useRef(null);
 
-
   const autosave = async () => {
     try {
       const data = {
@@ -289,27 +288,7 @@ const CreatePage = () => {
 
           <BlockNoteView editor={editor} theme={"light"} />
 
-          <LoadingButton
-            size="small"
-            color="secondary"
-            loadingPosition="start"
-            startIcon={<SaveAsIcon />}
-            variant="contained"
-            loading={loading}
-            onClick={handleSave}
-            sx={{
-              backgroundColor: "black",
-              position: "fixed",
-              right: "60px",
-              bottom: "40px",
-              padding: "7px 10px",
-              "&:hover": {
-                backgroundColor: "black",
-              },
-            }}
-          >
-            <span>Save</span>
-          </LoadingButton>
+          
         </div>
       </div>
     </>

@@ -103,9 +103,31 @@ const Page = () => {
     setInputObject(blocks);
   });
 
-  const handleSave = async (pid) => {
-    setLoading(true);
+  const createDataWithId = async (data, tableName) => {
+    try {
+      const collectionRef = collection(db, tableName);
+      const docRef = await addDoc(collectionRef, data);
+      const docId = docRef.id;
 
+      const updatedData = {
+        ...data,
+        parentId: "",
+        createdAt: serverTimestamp(),
+      };
+
+      await updateDoc(doc(collectionRef, docId), updatedData);
+
+      navigate(`/landing-page/page/${docId}`);
+
+      return updatedData;
+    } catch (error) {
+      console.error(`Error creating ${tableName} data:`, error);
+      throw error;
+    }
+  };
+
+  const handleSave = async () => {
+    setLoading(true);
     try {
       const data = {
         workspaceId: activeWorkspace,
@@ -114,8 +136,14 @@ const Page = () => {
         banner: banner,
         pageTitle: title,
         parentId: "",
+        childPages: [],
+        children: [],
       };
-      await updateData("pages", pageId, data);
+
+      console.log("data", data);
+
+      await createDataWithId(data, "pages");
+
       setLoading(false);
     } catch (error) {
       console.error(error);
