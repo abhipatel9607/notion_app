@@ -15,7 +15,7 @@ import { Button, TextField } from "@mui/material";
 import { createData } from "../firebase/firebaseServices";
 import { HiOutlineDocumentAdd } from "react-icons/hi";
 import { db } from "../firebase/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Loader from "./Loader";
@@ -58,7 +58,7 @@ const Page = () => {
     };
 
     fetchData();
-  }, []);
+  }, [pageId]);
 
   const blocksToInsert = fetchedEditorObject?.map((block) => ({
     id: block.id,

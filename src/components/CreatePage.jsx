@@ -70,7 +70,6 @@ const CreatePage = () => {
 
   React.useEffect(() => {
     resetAutosaveTimeout();
-
     return () => clearTimeout(autosaveTimeoutRef.current);
   }, [inputObject, autosave]);
 
@@ -287,8 +286,6 @@ const CreatePage = () => {
           />
 
           <BlockNoteView editor={editor} theme={"light"} />
-
-          
         </div>
       </div>
     </>
