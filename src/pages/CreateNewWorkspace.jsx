@@ -1,11 +1,14 @@
 /** @format */
-import { useState } from "react";
+
+import React, { useState } from "react";
 import workspace_logo from "../assets/create-new-workspace-logo.png";
 import { createData } from "../firebase/firebaseServices";
 import { UserAuth } from "../firebase/authContext";
 import { useNavigate } from "react-router-dom";
 import { setActiveWorkspace } from "../utils/activeWorkspaceSlice";
 import { useDispatch } from "react-redux";
+import LoadingButton from "@mui/lab/LoadingButton";
+import ArticleIcon from '@mui/icons-material/Article';
 
 function CreateNewWorkspace() {
   const [newWorkspaceTitle, setNewWorkspaceTitle] = useState("");
@@ -13,8 +16,10 @@ function CreateNewWorkspace() {
   const { user } = UserAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [loading, setLoading] = React.useState(false);
 
   const handleCreateNewWorkspace = async () => {
+    setLoading(true);
     if (!newWorkspaceTitle) {
       setErrorMessage("Title Required*");
       return;
@@ -23,6 +28,7 @@ function CreateNewWorkspace() {
       const data = { title: newWorkspaceTitle, uid: user.uid };
       const createdWorkspaceData = await createData(data, "workspace");
       dispatch(setActiveWorkspace(createdWorkspaceData.id));
+      setLoading(false);
       navigate(`/landing-page/workspace/${createdWorkspaceData.id}`);
     } catch (error) {
       console.error(error);
@@ -54,12 +60,26 @@ function CreateNewWorkspace() {
                 {errorMessage}
               </span>
             )}
-            <button
-              className="create_workspace_btn"
+
+            <LoadingButton
+              size="small"
+              color="secondary"
+              loadingPosition="start"
+              variant="contained"
+              startIcon={<ArticleIcon />}
+              loading={loading}
               onClick={handleCreateNewWorkspace}
+              sx={{
+                backgroundColor: "black",
+
+                padding: "7px 10px",
+                "&:hover": {
+                  backgroundColor: "black",
+                },
+              }}
             >
-              Create Workspace
-            </button>
+              <span>Create Workspace</span>
+            </LoadingButton>
           </div>
         </div>
       </div>
