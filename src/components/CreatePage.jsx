@@ -36,7 +36,7 @@ const CreatePage = () => {
   const activeWorkspace = useSelector((state) => state.activeWorkspace);
 
   const insertNewPage = async () => {
-    await handleSave();
+    await handleSave("");
   };
 
   const createDataWithId = async (data, tableName) => {
@@ -85,7 +85,7 @@ const CreatePage = () => {
     setInputObject(blocks);
   });
 
-  const handleSave = async () => {
+  const handleSave = async (pId) => {
     setLoading(true);
     try {
       const data = {
@@ -94,14 +94,14 @@ const CreatePage = () => {
         headerEmoji: emoji,
         banner: banner,
         pageTitle: title,
-        parentId: "",
+        parentId: pId,
         childPages: [],
         children: [],
       };
 
       console.log("data", data);
 
-      await createDataWithId(data, "pages");
+      await createDataWithId(data, "pages", pId);
 
       setLoading(false);
     } catch (error) {
@@ -245,7 +245,7 @@ const CreatePage = () => {
             startIcon={<SaveAsIcon />}
             variant="contained"
             loading={loading}
-            onClick={handleSave}
+            onClick={() => handleSave("")}
             sx={{
               backgroundColor: "black",
               position: "fixed",

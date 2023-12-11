@@ -103,7 +103,7 @@ const Page = () => {
     setInputObject(blocks);
   });
 
-  const handleSave = async (pid) => {
+  const handleSave = async () => {
     setLoading(true);
 
     try {
@@ -262,7 +262,7 @@ const Page = () => {
             startIcon={<SaveAsIcon />}
             variant="contained"
             loading={loading}
-            onClick={handleSave}
+            onClick={handleSave("pId")}
             sx={{
               backgroundColor: "black",
               position: "fixed",
