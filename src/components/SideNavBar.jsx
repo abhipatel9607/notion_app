@@ -22,6 +22,7 @@ const SideNavBar = () => {
   const activeWorkspace = useSelector((state) => state.activeWorkspace);
   const navigate = useNavigate();
   // console.log(activeWorkspace);
+  console.log(workspace);
 
   // Inside your component
   const handleActiveWorkspace = (id) => {
@@ -35,9 +36,24 @@ const SideNavBar = () => {
     dispatch(toggleMenu());
   };
   const [data, setData] = useState([]);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log(activeWorkspace);
+        console.log("fething");
         const result = await getAllById(
           "pages",
           "workspaceId",
@@ -67,19 +83,7 @@ const SideNavBar = () => {
       }
     };
     fetchData();
-  }, []);
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logOut();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  }, [activeWorkspace]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,7 +91,7 @@ const SideNavBar = () => {
         if (user.uid) {
           const workspaceData = await getAllById("workspace", "uid", user.uid);
           dispatch(setWorkspace(workspaceData));
-          if (activeWorkspace) {
+          if (!activeWorkspace) {
             dispatch(setActiveWorkspace(workspaceData[0].workspaceId));
             navigate(`workspace/${workspaceData[0].workspaceId}`);
           } else if (workspaceData.length > 0) {
