@@ -39,6 +39,57 @@ const CreatePage = () => {
     await handleSave();
   };
 
+  const autosaveTimeoutRef = React.useRef(null);
+
+
+  const autosave = async () => {
+    try {
+      const data = {
+        workspaceId: activeWorkspace,
+        content: JSON.stringify(inputObject),
+        headerEmoji: emoji,
+        banner: banner,
+        pageTitle: title,
+        parentId: "",
+        childPages: [],
+        children: [],
+      };
+
+      await createDataWithId(data, "pages");
+
+      console.log("Autosaved!");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const resetAutosaveTimeout = () => {
+    clearTimeout(autosaveTimeoutRef.current);
+
+    autosaveTimeoutRef.current = setTimeout(autosave, 5000);
+  };
+
+  React.useEffect(() => {
+    resetAutosaveTimeout();
+
+    return () => clearTimeout(autosaveTimeoutRef.current);
+  }, [inputObject, autosave]);
+
+  React.useEffect(() => {
+    const resetTimeoutOnUserActivity = () => {
+      resetAutosaveTimeout();
+    };
+
+    document.addEventListener("keydown", resetTimeoutOnUserActivity);
+    document.addEventListener("mousemove", resetTimeoutOnUserActivity);
+
+    return () => {
+      clearTimeout(autosaveTimeoutRef.current);
+      document.removeEventListener("keydown", resetTimeoutOnUserActivity);
+      document.removeEventListener("mousemove", resetTimeoutOnUserActivity);
+    };
+  }, [resetAutosaveTimeout]);
+
   const createDataWithId = async (data, tableName) => {
     try {
       const collectionRef = collection(db, tableName);

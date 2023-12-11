@@ -122,6 +122,53 @@ const Page = () => {
     }
   };
 
+  const autosaveTimeoutRef = React.useRef(null);
+
+  const autosave = async () => {
+    try {
+      const data = {
+        workspaceId: activeWorkspace,
+        content: JSON.stringify(inputObject),
+        headerEmoji: emoji,
+        banner: banner,
+        pageTitle: title,
+        parentId: "",
+      };
+      await updateData("pages", pageId, data);
+
+      console.log("Autosaved!");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const resetAutosaveTimeout = () => {
+    clearTimeout(autosaveTimeoutRef.current);
+
+    autosaveTimeoutRef.current = setTimeout(autosave, 5000);
+  };
+
+  React.useEffect(() => {
+    resetAutosaveTimeout();
+
+    return () => clearTimeout(autosaveTimeoutRef.current);
+  }, [inputObject, autosave]);
+
+  React.useEffect(() => {
+    const resetTimeoutOnUserActivity = () => {
+      resetAutosaveTimeout();
+    };
+
+    document.addEventListener("keydown", resetTimeoutOnUserActivity);
+    document.addEventListener("mousemove", resetTimeoutOnUserActivity);
+
+    return () => {
+      clearTimeout(autosaveTimeoutRef.current);
+      document.removeEventListener("keydown", resetTimeoutOnUserActivity);
+      document.removeEventListener("mousemove", resetTimeoutOnUserActivity);
+    };
+  }, [resetAutosaveTimeout]);
+
   const getRandomEmoji = () => {
     const emojis = ["😊", "🚀", "🌈", "🎉", "🍕", "🔥", "📚", "❤️", "🎸", "🐱"];
     const randomIndex = Math.floor(Math.random() * emojis.length);
@@ -254,28 +301,6 @@ const Page = () => {
           />
 
           <BlockNoteView editor={editor} theme={"light"} />
-
-          <LoadingButton
-            size="small"
-            color="secondary"
-            loadingPosition="start"
-            startIcon={<SaveAsIcon />}
-            variant="contained"
-            loading={loading}
-            onClick={handleSave}
-            sx={{
-              backgroundColor: "black",
-              position: "fixed",
-              right: "60px",
-              bottom: "40px",
-              padding: "7px 10px",
-              "&:hover": {
-                backgroundColor: "black",
-              },
-            }}
-          >
-            <span>Save</span>
-          </LoadingButton>
         </div>
       </div>
     </>

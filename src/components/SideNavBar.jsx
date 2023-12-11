@@ -149,6 +149,7 @@ const SideNavBar = () => {
               </div>
             )}
           </div>
+          <div style={{marginLeft:"16px"}}>Your {workspace.length > 1 ? "Workspaces" : "Workspace"}</div>
           {workspace &&
             workspace.map((workspace) => (
               <div
