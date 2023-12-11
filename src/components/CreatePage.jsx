@@ -44,7 +44,7 @@ const CreatePage = () => {
 
       await updateDoc(doc(collectionRef, docId), updatedData);
 
-      navigate(`/page/${docId}`);
+      navigate(`/landing-page/page/${docId}`);
 
       return updatedData;
     } catch (error) {
@@ -89,7 +89,7 @@ const CreatePage = () => {
 
       console.log("data", data);
 
-      await createDataWithId(data, "pagess");
+      await createDataWithId(data, "pages");
 
       setLoading(false);
     } catch (error) {

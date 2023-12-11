@@ -63,7 +63,7 @@ const Page = () => {
         pageTitle: title,
       };
 
-      await createData(data, "pagess");
+      await createData(data, "pages");
 
       setLoading(false);
     } catch (error) {

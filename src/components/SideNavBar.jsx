@@ -41,7 +41,7 @@ const SideNavBar = () => {
         const result = await getAllById(
           "pages",
           "workspaceId",
-          "3lakknCMmwQ49UUmAr1yhNL1gd03"
+          activeWorkspace
         );
 
         const idToNodeMap = {};
