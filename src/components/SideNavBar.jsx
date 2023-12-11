@@ -36,6 +36,19 @@ const SideNavBar = () => {
     dispatch(toggleMenu());
   };
   const [data, setData] = useState([]);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -72,25 +85,13 @@ const SideNavBar = () => {
     fetchData();
   }, [activeWorkspace]);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logOut();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (user.uid) {
           const workspaceData = await getAllById("workspace", "uid", user.uid);
           dispatch(setWorkspace(workspaceData));
-          if (activeWorkspace) {
+          if (!activeWorkspace) {
             dispatch(setActiveWorkspace(workspaceData[0].workspaceId));
             navigate(`workspace/${workspaceData[0].workspaceId}`);
           } else if (workspaceData.length > 0) {
