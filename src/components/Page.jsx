@@ -112,7 +112,7 @@ const Page = () => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const pagesRef = doc(db, "pagess", pageId);
+      const pagesRef = doc(db, "pages", pageId);
 
       try {
         const pagesDoc = await getDoc(pagesRef);
@@ -186,7 +186,7 @@ const Page = () => {
         pageTitle: title,
       };
 
-      await createData(data, "pagess");
+      await createData(data, "pages");
 
       setLoading(false);
     } catch (error) {

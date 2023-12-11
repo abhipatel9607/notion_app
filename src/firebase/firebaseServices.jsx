@@ -18,7 +18,12 @@ import { db } from "./firebaseConfig";
 export const getAllById = async (tableName, compareProperty, compareValue) => {
   try {
     const collectionRef = collection(db, tableName);
-    const q = query(collectionRef, where(compareProperty, "==", compareValue));
+    const q = query(
+      collectionRef,
+      where(compareProperty, "==", compareValue),
+      orderBy("createdAt", "desc")
+    );
+
     const querySnapshot = await getDocs(q);
 
     return querySnapshot.docs.map((doc) => ({
@@ -36,6 +41,7 @@ export const createData = async (data, tableName) => {
     const collectionRef = collection(db, tableName);
     const createdWorkspaceData = await addDoc(collectionRef, {
       ...data,
+      createdAt: serverTimestamp(),
     });
     return createdWorkspaceData;
   } catch (error) {

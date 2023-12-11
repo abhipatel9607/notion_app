@@ -89,7 +89,7 @@ const CreatePage = () => {
 
       console.log("data", data);
 
-      await createDataWithId(data, "pagess");
+      await createDataWithId(data, "pages");
 
       setLoading(false);
     } catch (error) {
