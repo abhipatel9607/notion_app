@@ -43,3 +43,14 @@ export const createData = async (data, tableName) => {
     return error;
   }
 };
+
+// Update a document in a collection
+export const updateData = async (tableName, docId, updatedData) => {
+  try {
+    const docRef = doc(db, tableName, docId);
+    await updateDoc(docRef, { ...updatedData });
+  } catch (error) {
+    console.error(`Error updating ${tableName} document:`, error);
+    throw error;
+  }
+};
