@@ -39,7 +39,7 @@ const CreatePage = () => {
 
       const updatedData = {
         ...data,
-        parentId: docId,
+        parentId: "",
       };
 
       await updateDoc(doc(collectionRef, docId), updatedData);
@@ -85,6 +85,9 @@ const CreatePage = () => {
         headerEmoji: emoji,
         banner: banner,
         pageTitle: title,
+        parentId: "",
+        childPages: [],
+        children: [],
       };
 
       console.log("data", data);

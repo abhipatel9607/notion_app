@@ -16,11 +16,13 @@ import { createData } from "../firebase/firebaseServices";
 import { HiOutlineDocumentAdd } from "react-icons/hi";
 import { db } from "../firebase/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Page = () => {
   const [data, setData] = React.useState();
   const [inputObject, setInputObject] = React.useState(null);
-  const { workspaceId } = useParams();
+  const activeWorkspace = useSelector((state) => state.activeWorkspace);
   const [emoji, setEmoji] = React.useState("");
   const [banner, setBanner] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -28,6 +30,7 @@ const Page = () => {
   const [fetchedEditorObject, setFetchedEditorObject] = React.useState();
   const [intialBlockId, setInitialBlockId] = React.useState();
   const [isInserted, setIsInserted] = React.useState(false);
+  const navigate = useNavigate();
 
   const object = [
     {
@@ -112,15 +115,15 @@ const Page = () => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const pagesRef = doc(db, "pagess", pageId);
+      const pagesRef = doc(db, "pages", pageId);
 
       try {
         const pagesDoc = await getDoc(pagesRef);
         setData(pagesDoc.data());
-        setEmoji(pagesDoc.data().headerEmoji);
-        setBanner(pagesDoc.data().banner);
-        setTitle(pagesDoc.data().pageTitle);
-        setFetchedEditorObject(JSON.parse(pagesDoc.data().content));
+        setEmoji(pagesDoc.data()?.headerEmoji);
+        setBanner(pagesDoc.data()?.banner);
+        setTitle(pagesDoc.data()?.pageTitle);
+        setFetchedEditorObject(JSON.parse(pagesDoc.data()?.content));
 
         const blocks = editor.topLevelBlocks;
         setInitialBlockId(blocks[0].id);
@@ -149,7 +152,8 @@ const Page = () => {
   }, [intialBlockId]);
 
   const insertNewPage = async () => {
-    await handleSave();
+    await handleSave("6yZyJ0edPGVNUxxjEg7Z");
+    navigate(`/landing-page/workspace/${activeWorkspace}`);
   };
 
   const insertNewPageItem = {
@@ -175,15 +179,16 @@ const Page = () => {
     setInputObject(blocks);
   });
 
-  const handleSave = async () => {
+  const handleSave = async (pid) => {
     setLoading(true);
     try {
       const data = {
-        workspaceId: workspaceId,
+        workspaceId: activeWorkspace,
         content: JSON.stringify(inputObject),
         headerEmoji: emoji,
         banner: banner,
         pageTitle: title,
+        parentId: "",
       };
 
       await createData(data, "pages");
