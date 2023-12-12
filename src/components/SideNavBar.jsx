@@ -95,10 +95,9 @@ const SideNavBar = () => {
           dispatch(setWorkspace(workspaceData));
           const lsActiveWorkspaceId = localStorage.getItem("activeWorkspaceId");
           if (lsActiveWorkspaceId) {
-            const notionPath = localStorage.getItem("currentPath");
             dispatch(setActiveWorkspace(lsActiveWorkspaceId));
             dispatch(setActivePage(""));
-            navigate(`${notionPath}`);
+            navigate(`workspace/${workspaceData[0].workspaceId}`);
           } else if (!activeWorkspace) {
             dispatch(setActiveWorkspace(workspaceData[0].workspaceId));
             dispatch(setActivePage(""));
