@@ -29,6 +29,10 @@ function CreateNewWorkspace() {
       const createdWorkspaceData = await createData(data, "workspace");
       dispatch(setActiveWorkspace(createdWorkspaceData.id));
       localStorage.setItem("activeWorkspaceId", createdWorkspaceData.id);
+      localStorage.setItem(
+        "currentPath",
+        "workspace/" + createdWorkspaceData.id
+      );
       setLoading(false);
       navigate(`/landing-page/workspace/${createdWorkspaceData.id}`);
     } catch (error) {
