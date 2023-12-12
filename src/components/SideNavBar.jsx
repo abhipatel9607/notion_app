@@ -47,6 +47,8 @@ const SideNavBar = () => {
 
   const handleLogout = async () => {
     try {
+      localStorage.removeItem("activeWorkspaceId");
+      localStorage.removeItem("currentPath");
       await logOut();
     } catch (error) {
       console.error(error);

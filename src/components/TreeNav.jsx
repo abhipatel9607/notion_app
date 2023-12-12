@@ -1,5 +1,16 @@
-/** @format */
+/**
+ * eslint-disable react/prop-types
+ *
+ * @format
+ */
 
+/**
+ * eslint-disable react/prop-types
+ *
+ * @format
+ */
+
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -18,7 +29,7 @@ const TreeNav = ({ node }) => {
   };
 
   return (
-    <div onClick={() => navigateToPage(node.pagesId)}>
+    <div>
       <div
         className="cursor-pointer text-gray-600 p-1 text-sm"
         onClick={handleToggle}
@@ -28,7 +39,9 @@ const TreeNav = ({ node }) => {
         ) : (
           <KeyboardArrowRightIcon sx={{ color: "grey" }} />
         )}
-        <span>{node.pageTitle}</span>
+        <span onClick={() => navigateToPage(node.pagesId)}>
+          {node.pageTitle}
+        </span>
       </div>
       {isExpanded && node.children && node.children.length > 0 && (
         <ul>
