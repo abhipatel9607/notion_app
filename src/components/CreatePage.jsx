@@ -43,7 +43,7 @@ const CreatePage = () => {
   const autosaveTimeoutRef = React.useRef(null);
 
   const autosave = async () => {
-    if (inputObject[0].content.length > 0) {
+    if (title) {
       try {
         const data = {
           workspaceId: activeWorkspace,
