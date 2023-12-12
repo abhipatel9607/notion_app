@@ -302,7 +302,7 @@ const Page = () => {
             }}
           />
 
-          <BlockNoteView editor={editor} theme={"light"} />
+          <BlockNoteView key={pageId} editor={editor} theme={"light"} />
         </div>
       </div>
     </>
