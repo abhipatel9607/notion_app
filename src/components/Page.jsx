@@ -69,20 +69,22 @@ const Page = () => {
     dispatch(setActivePage(pageId));
   }, [pageId]);
 
-  const blocksToInsert = fetchedEditorObject?.map((block) => ({
-    id: block.id,
-    type: block.type,
-    props: block.props,
-    content: block.content,
-    children: block.children,
-  }));
-
   React.useEffect(() => {
-    if (!isInserted && intialBlockId) {
-      editor.insertBlocks(blocksToInsert, intialBlockId, "before");
-      setIsInserted(true);
+    // Cleanup blocks when fetched editor content changes
+    editor && cleanupEditor();
+
+    const blocksToInsert = fetchedEditorObject?.map((block) => ({
+      id: block.id,
+      type: block.type,
+      props: block.props,
+      content: block.content,
+      children: block.children,
+    }));
+
+    if (intialBlockId) {
+      editor.insertBlocks(blocksToInsert, intialBlockId, "after");
     }
-  }, [intialBlockId]);
+  }, [fetchedEditorObject, intialBlockId]);
 
   const insertNewPage = async () => {
     // await handleSave("");
@@ -105,7 +107,28 @@ const Page = () => {
 
   const editor = useBlockNote({
     slashMenuItems: customSlashMenuItemList,
+    // initialContent: fetchedEditorObject
   });
+
+  const cleanupEditor = () => {
+    const existingBlockIds = editor?.topLevelBlocks?.map((block) => block.id);
+
+    if (
+      existingBlockIds &&
+      existingBlockIds.length > 0 &&
+      existingBlockIds[0] !== "initialBlockId"
+    ) {
+
+      if(existingBlockIds.length > 1){
+        console.log(existingBlockIds.length);
+        editor.removeBlocks(existingBlockIds.slice(1))
+      }
+      
+      // editor.removeBlocks(newArray);
+
+
+    }
+  };
 
   editor.onEditorContentChange(() => {
     const blocks = editor.topLevelBlocks;
@@ -302,7 +325,7 @@ const Page = () => {
             }}
           />
 
-          <BlockNoteView editor={editor} theme={"light"} />
+          <BlockNoteView editor={editor} theme={"light"} key={activePage} />
         </div>
       </div>
     </>
