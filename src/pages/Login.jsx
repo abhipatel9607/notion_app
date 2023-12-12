@@ -14,6 +14,8 @@ function Login() {
   // Handle Google Sign In
   const handleGoogleSingin = async () => {
     try {
+      localStorage.removeItem("activeWorkspaceId");
+      localStorage.removeItem("currentPath");
       await googleSingIn();
     } catch (err) {
       console.error(err);
