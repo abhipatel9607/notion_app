@@ -10,7 +10,7 @@ import { getAllById } from "../firebase/firebaseServices";
 import { CollapsibleTree } from "./TreeNav";
 import { useDispatch, useSelector } from "react-redux";
 import { setWorkspace } from "../utils/workspaceSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { setActiveWorkspace } from "../utils/activeWorkspaceSlice";
 import { setActivePage } from "../utils/activePageSlice";
 
@@ -22,14 +22,17 @@ const SideNavBar = () => {
   const activePage = useSelector((state) => state.activePage);
   const { user, logOut } = UserAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   // Inside your component
   const handleActiveWorkspace = (id) => {
-    console.log(id);
     setIsDropdownOpen(false);
     dispatch(setActiveWorkspace(id));
+    localStorage.setItem("activeWorkspaceId", id);
+    localStorage.setItem("currentPath", location.pathname);
     dispatch(setActivePage(""));
+    localStorage.setItem("activePageId", "");
     navigate(`workspace/${id}`);
   };
 
@@ -53,8 +56,6 @@ const SideNavBar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(activeWorkspace);
-        console.log("fething");
         const result = await getAllById(
           "pages",
           "workspaceId",
@@ -92,7 +93,13 @@ const SideNavBar = () => {
         if (user.uid) {
           const workspaceData = await getAllById("workspace", "uid", user.uid);
           dispatch(setWorkspace(workspaceData));
-          if (!activeWorkspace) {
+          const lsActiveWorkspaceId = localStorage.getItem("activeWorkspaceId");
+          if (lsActiveWorkspaceId) {
+            const notionPath = localStorage.getItem("currentPath");
+            dispatch(setActiveWorkspace(lsActiveWorkspaceId));
+            dispatch(setActivePage(""));
+            navigate(`${notionPath}`);
+          } else if (!activeWorkspace) {
             dispatch(setActiveWorkspace(workspaceData[0].workspaceId));
             dispatch(setActivePage(""));
             navigate(`workspace/${workspaceData[0].workspaceId}`);

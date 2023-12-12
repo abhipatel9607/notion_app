@@ -11,6 +11,7 @@ import {
   orderBy,
   serverTimestamp,
   updateDoc,
+  Timestamp,
 } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
@@ -21,7 +22,7 @@ export const getAllById = async (tableName, compareProperty, compareValue) => {
     const q = query(
       collectionRef,
       where(compareProperty, "==", compareValue),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "asc")
     );
 
     const querySnapshot = await getDocs(q);
@@ -29,6 +30,10 @@ export const getAllById = async (tableName, compareProperty, compareValue) => {
     return querySnapshot.docs.map((doc) => ({
       [`${tableName}Id`]: doc.id,
       ...doc.data(),
+      createdAt:
+        doc.data().createdAt instanceof Timestamp
+          ? doc.data().createdAt.toMillis()
+          : doc.data().createdAt,
     }));
   } catch (error) {
     console.error(`Error getting all ${tableName}:`, error);
@@ -54,6 +59,11 @@ export const createData = async (data, tableName) => {
 export const updateData = async (tableName, docId, updatedData) => {
   try {
     const docRef = doc(db, tableName, docId);
+
+    if (updatedData.createdAt instanceof Timestamp) {
+      updatedData.createdAt = updatedData.createdAt.toMillis();
+    }
+
     await updateDoc(docRef, { ...updatedData });
   } catch (error) {
     console.error(`Error updating ${tableName} document:`, error);

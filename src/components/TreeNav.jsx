@@ -13,11 +13,12 @@ const TreeNav = ({ node }) => {
     setIsExpanded(!isExpanded);
   };
   const navigateToPage = (pageId) => {
+    localStorage.setItem("currentPath", "page/" + pageId);
     navigate("page/" + pageId);
   };
 
   return (
-    <div>
+    <div onClick={() => navigateToPage(node.pagesId)}>
       <div
         className="cursor-pointer text-gray-600 p-1 text-sm"
         onClick={handleToggle}
@@ -27,9 +28,7 @@ const TreeNav = ({ node }) => {
         ) : (
           <KeyboardArrowRightIcon sx={{ color: "grey" }} />
         )}
-        <span onClick={() => navigateToPage(node.pagesId)}>
-          {node.pageTitle}
-        </span>
+        <span>{node.pageTitle}</span>
       </div>
       {isExpanded && node.children && node.children.length > 0 && (
         <ul>

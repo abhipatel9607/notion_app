@@ -8,8 +8,6 @@ import {
 } from "@blocknote/react";
 import "@blocknote/core/style.css";
 import { useNavigate } from "react-router-dom";
-// import LoadingButton from "@mui/lab/LoadingButton";
-// import SaveAsIcon from "@mui/icons-material/SaveAs";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { Button, TextField } from "@mui/material";
 
@@ -56,7 +54,6 @@ const CreatePage = () => {
           children: [],
         };
         await createDataWithId(data, "pages");
-        console.log(activePage);
         console.log("Autosaved!");
       } catch (error) {
         console.error(error);

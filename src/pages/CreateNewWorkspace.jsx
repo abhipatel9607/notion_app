@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { setActiveWorkspace } from "../utils/activeWorkspaceSlice";
 import { useDispatch } from "react-redux";
 import LoadingButton from "@mui/lab/LoadingButton";
-import ArticleIcon from '@mui/icons-material/Article';
+import ArticleIcon from "@mui/icons-material/Article";
 
 function CreateNewWorkspace() {
   const [newWorkspaceTitle, setNewWorkspaceTitle] = useState("");
@@ -28,6 +28,7 @@ function CreateNewWorkspace() {
       const data = { title: newWorkspaceTitle, uid: user.uid };
       const createdWorkspaceData = await createData(data, "workspace");
       dispatch(setActiveWorkspace(createdWorkspaceData.id));
+      localStorage.setItem("activeWorkspaceId", createdWorkspaceData.id);
       setLoading(false);
       navigate(`/landing-page/workspace/${createdWorkspaceData.id}`);
     } catch (error) {

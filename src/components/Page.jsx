@@ -112,62 +112,6 @@ const Page = () => {
     setInputObject(blocks);
   });
 
-  const createDataWithId = async (data, tableName) => {
-    try {
-      const collectionRef = collection(db, tableName);
-      const docRef = await addDoc(collectionRef, data);
-      const docId = docRef.id;
-
-      if (!activePage) {
-        const updatedData = {
-          ...data,
-          parentId: data.parentId || activePage,
-          createdAt: serverTimestamp(),
-        };
-
-        await updateDoc(doc(collectionRef, docId), updatedData);
-        navigate(`/landing-page/page/${docId}`);
-
-        return updatedData;
-      } else {
-        const updatedData = {
-          ...data,
-          parentId: data.parentId || activePage,
-          createdAt: serverTimestamp(),
-        };
-
-        await updateDoc(doc(collectionRef, docId), updatedData);
-        navigate(`/landing-page/page/${docId}`);
-        return updatedData;
-      }
-    } catch (error) {
-      console.error(`Error creating ${tableName} data:`, error);
-      throw error;
-    }
-  };
-
-  // const handleSave = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const data = {
-  //       workspaceId: activeWorkspace,
-  //       content: JSON.stringify(inputObject),
-  //       headerEmoji: emoji,
-  //       banner: banner,
-  //       pageTitle: title,
-  //       parentId: pageId,
-  //       childPages: [],
-  //       children: [],
-  //     };
-
-  //     await createDataWithId(data, "pages");
-  //     console.log(activePage);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   const autosaveTimeoutRef = React.useRef(null);
 
   const autosave = async () => {
