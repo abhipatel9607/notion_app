@@ -1,6 +1,7 @@
 /** @format */
-import { useEffect, useState } from "react";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import arrow_upAndDown from "../assets/arrow_updown.png";
+import { useEffect, useState } from "react";
 import { UserAuth } from "../firebase/authContext";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { toggleMenu } from "../utils/appSlice";
@@ -13,22 +14,15 @@ import { useNavigate } from "react-router-dom";
 import { setActiveWorkspace } from "../utils/activeWorkspaceSlice";
 import { setActivePage } from "../utils/activePageSlice";
 
-import TaskAltIcon from "@mui/icons-material/TaskAlt";
-// import ImportContactsIcon from "@mui/icons-material/ImportContacts";
-// import { Button } from "@mui/material";
-
 const SideNavBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { user, logOut } = UserAuth();
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
-  const dispatch = useDispatch();
   const workspace = useSelector((state) => state.workspace);
   const activeWorkspace = useSelector((state) => state.activeWorkspace);
   const activePage = useSelector((state) => state.activePage);
-
+  const { user, logOut } = UserAuth();
   const navigate = useNavigate();
-  // console.log(activeWorkspace);
-  console.log(workspace);
+  const dispatch = useDispatch();
 
   // Inside your component
   const handleActiveWorkspace = (id) => {
@@ -158,17 +152,14 @@ const SideNavBar = () => {
               </div>
             )}
           </div>
-          <div
-            style={{
-              marginLeft: "16px",
-              display: "flex",
-              alignItems: "center",
-              gap: "5px",
-            }}
-          >
-            Your {workspace.length > 1 ? "Workspaces" : "Workspace"}
+          <Link to="/create-new-workspace">
+            <button className="bg-gray-300 hover:bg-gray-400 text-gray-700 ml-2 mt-2 py-1 px-4 rounded">
+              Create New Workspace
+            </button>
+          </Link>
+          <div className="text-gray-700 block px-4 py-2 font-bold mt-4 text-sm">
+            Your {workspace.length > 1 ? "Workspaces:" : "Workspace:"}
           </div>
-
           {workspace &&
             workspace.map((workspace) => (
               <div
@@ -197,11 +188,6 @@ const SideNavBar = () => {
                 )}
               </div>
             ))}
-          <Link to="/create-new-workspace">
-            <button className="text-gray-700 block w-full px-4 py-2 text-left text-sm">
-              Create New Workspace
-            </button>
-          </Link>
 
           {isMenuOpen && (
             <div
@@ -213,6 +199,9 @@ const SideNavBar = () => {
               <ChevronsLeft className="h-6 w-6" />
             </div>
           )}
+        </div>
+        <div className="text-gray-700 block px-4 py-2 font-bold mt-4 text-sm">
+          {workspace.length > 1 ? "Pages:" : "Pages:"}
         </div>
         <CollapsibleTree data={data}></CollapsibleTree>
         <div

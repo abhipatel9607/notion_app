@@ -1,11 +1,5 @@
-/* eslint-disable react/prop-types */
-/**
- * eslint-disable react/prop-types
- *
- * @format
- */
+/** @format */
 
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -52,7 +46,7 @@ const TreeNav = ({ node }) => {
 
 export const CollapsibleTree = ({ data }) => {
   return (
-    <div className="mt-4 pl-2">
+    <div className="pl-2">
       <ul>
         {data.map((node) => (
           <li key={node.pagesId}>
