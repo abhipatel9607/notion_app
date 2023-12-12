@@ -4,7 +4,7 @@ import { useState } from "react";
 import createBtn from "../assets/CretateNewPage.png";
 import { UserAuth } from "../firebase/authContext";
 import { useNavigate } from "react-router-dom";
-import Page from "./Page";
+// import Page from "./Page";
 import CreatePage from "./CreatePage";
 import { useSelector } from "react-redux";
 

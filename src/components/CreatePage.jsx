@@ -8,8 +8,8 @@ import {
 } from "@blocknote/react";
 import "@blocknote/core/style.css";
 import { useNavigate } from "react-router-dom";
-import LoadingButton from "@mui/lab/LoadingButton";
-import SaveAsIcon from "@mui/icons-material/SaveAs";
+// import LoadingButton from "@mui/lab/LoadingButton";
+// import SaveAsIcon from "@mui/icons-material/SaveAs";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { Button, TextField } from "@mui/material";
 
@@ -34,6 +34,7 @@ const CreatePage = () => {
   const navigate = useNavigate();
 
   const activeWorkspace = useSelector((state) => state.activeWorkspace);
+  const activePage = useSelector((state) => state.activePage);
 
   const insertNewPage = async () => {
     await handleSave();
@@ -42,23 +43,24 @@ const CreatePage = () => {
   const autosaveTimeoutRef = React.useRef(null);
 
   const autosave = async () => {
-    try {
-      const data = {
-        workspaceId: activeWorkspace,
-        content: JSON.stringify(inputObject),
-        headerEmoji: emoji,
-        banner: banner,
-        pageTitle: title,
-        parentId: "",
-        childPages: [],
-        children: [],
-      };
+    if (inputObject[0].content.length > 0) {
+      try {
+        const data = {
+          workspaceId: activeWorkspace,
+          content: JSON.stringify(inputObject),
+          headerEmoji: emoji,
+          banner: banner,
+          pageTitle: title,
+          parentId: activePage,
+          childPages: [],
+          children: [],
+        };
+        await createDataWithId(data, "pages");
 
-      await createDataWithId(data, "pages");
-
-      console.log("Autosaved!");
-    } catch (error) {
-      console.error(error);
+        console.log("Autosaved!");
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -93,18 +95,29 @@ const CreatePage = () => {
       const collectionRef = collection(db, tableName);
       const docRef = await addDoc(collectionRef, data);
       const docId = docRef.id;
+      if (!activePage) {
+        const updatedData = {
+          ...data,
+          parentId: "",
+          createdAt: serverTimestamp(),
+        };
 
-      const updatedData = {
-        ...data,
-        parentId: "",
-        createdAt: serverTimestamp(),
-      };
+        await updateDoc(doc(collectionRef, docId), updatedData);
+        navigate(`/landing-page/page/${docId}`);
 
-      await updateDoc(doc(collectionRef, docId), updatedData);
+        return updatedData;
+      } else {
+        const updatedData = {
+          ...data,
+          parentId: activePage,
+          createdAt: serverTimestamp(),
+        };
 
-      navigate(`/landing-page/page/${docId}`);
+        await updateDoc(doc(collectionRef, docId), updatedData);
+        navigate(`/landing-page/page/${docId}`);
 
-      return updatedData;
+        return updatedData;
+      }
     } catch (error) {
       console.error(`Error creating ${tableName} data:`, error);
       throw error;

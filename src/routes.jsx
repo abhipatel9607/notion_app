@@ -8,7 +8,7 @@ import Protected from "./firebase/Protected";
 import Welcome from "./pages/Welcome";
 import LandingPage from "./pages/LandingPage";
 import CreateNewWorkspace from "./pages/CreateNewWorkspace";
-import Body from "./components/Body";
+// import Body from "./components/Body";
 import CreatePage from "./components/CreatePage";
 import Page from "./components/Page";
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /**
  * eslint-disable react/prop-types
  *
@@ -61,6 +62,5 @@ export const CollapsibleTree = ({ data }) => {
       </ul>
     </div>
   );
-  between;
 };
 export default TreeNav;

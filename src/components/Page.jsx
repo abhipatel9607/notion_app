@@ -1,6 +1,6 @@
 /** @format */
 import PanoramaIcon from "@mui/icons-material/Panorama";
-import React from "react";
+import React, { useState } from "react";
 import {
   BlockNoteView,
   useBlockNote,
@@ -8,18 +8,27 @@ import {
 } from "@blocknote/react";
 import "@blocknote/core/style.css";
 import { useParams } from "react-router-dom";
-import LoadingButton from "@mui/lab/LoadingButton";
-import SaveAsIcon from "@mui/icons-material/SaveAs";
+// import LoadingButton from "@mui/lab/LoadingButton";
+// import SaveAsIcon from "@mui/icons-material/SaveAs";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { Button, TextField } from "@mui/material";
-import { createData } from "../firebase/firebaseServices";
+// import { createData } from "../firebase/firebaseServices";
 import { HiOutlineDocumentAdd } from "react-icons/hi";
 import { db } from "../firebase/firebaseConfig";
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  updateDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Loader from "./Loader";
 import { updateData } from "../firebase/firebaseServices";
+import { useDispatch } from "react-redux";
+import { setActivePage } from "../utils/activePageSlice";
 
 const Page = () => {
   const [data, setData] = React.useState();
@@ -34,6 +43,7 @@ const Page = () => {
   const [isInserted, setIsInserted] = React.useState(false);
   const navigate = useNavigate();
   const [loader, setLoader] = React.useState(true);
+  const dispatch = useDispatch();
 
   const { pageId } = useParams();
 
@@ -58,6 +68,7 @@ const Page = () => {
     };
 
     fetchData();
+    dispatch(setActivePage(pageId));
   }, [pageId]);
 
   const blocksToInsert = fetchedEditorObject?.map((block) => ({
@@ -76,7 +87,7 @@ const Page = () => {
   }, [intialBlockId]);
 
   const insertNewPage = async () => {
-    await handleSave("6yZyJ0edPGVNUxxjEg7Z");
+    // await handleSave("");
     navigate(`/landing-page/workspace/${activeWorkspace}`);
   };
 
@@ -135,7 +146,7 @@ const Page = () => {
         headerEmoji: emoji,
         banner: banner,
         pageTitle: title,
-        parentId: "",
+        parentId: pageId,
         childPages: [],
         children: [],
       };
@@ -153,20 +164,22 @@ const Page = () => {
   const autosaveTimeoutRef = React.useRef(null);
 
   const autosave = async () => {
-    try {
-      const data = {
-        workspaceId: activeWorkspace,
-        content: JSON.stringify(inputObject),
-        headerEmoji: emoji,
-        banner: banner,
-        pageTitle: title,
-        parentId: "",
-      };
-      await updateData("pages", pageId, data);
+    if (inputObject[0].content.length > 0) {
+      try {
+        const data = {
+          workspaceId: activeWorkspace,
+          content: JSON.stringify(inputObject),
+          headerEmoji: emoji,
+          banner: banner,
+          pageTitle: title,
+          parentId: "",
+        };
+        await updateData("pages", pageId, data);
 
-      console.log("Autosaved!");
-    } catch (error) {
-      console.error(error);
+        console.log("Autosaved!");
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 

@@ -11,9 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { setWorkspace } from "../utils/workspaceSlice";
 import { useNavigate } from "react-router-dom";
 import { setActiveWorkspace } from "../utils/activeWorkspaceSlice";
+import { setActivePage } from "../utils/activePageSlice";
+
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import ImportContactsIcon from "@mui/icons-material/ImportContacts";
-import { Button } from "@mui/material";
+// import ImportContactsIcon from "@mui/icons-material/ImportContacts";
+// import { Button } from "@mui/material";
 
 const SideNavBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -22,6 +24,8 @@ const SideNavBar = () => {
   const dispatch = useDispatch();
   const workspace = useSelector((state) => state.workspace);
   const activeWorkspace = useSelector((state) => state.activeWorkspace);
+  const activePage = useSelector((state) => state.activePage);
+
   const navigate = useNavigate();
   // console.log(activeWorkspace);
   console.log(workspace);
@@ -31,6 +35,7 @@ const SideNavBar = () => {
     console.log(id);
     setIsDropdownOpen(false);
     dispatch(setActiveWorkspace(id));
+    dispatch(setActivePage(""));
     navigate(`workspace/${id}`);
   };
 
@@ -85,7 +90,7 @@ const SideNavBar = () => {
       }
     };
     fetchData();
-  }, [activeWorkspace]);
+  }, [activeWorkspace, activePage]);
 
   useEffect(() => {
     const fetchData = async () => {
