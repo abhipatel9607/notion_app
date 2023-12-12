@@ -100,9 +100,11 @@ const SideNavBar = () => {
           dispatch(setWorkspace(workspaceData));
           if (!activeWorkspace) {
             dispatch(setActiveWorkspace(workspaceData[0].workspaceId));
+            dispatch(setActivePage(""));
             navigate(`workspace/${workspaceData[0].workspaceId}`);
           } else if (workspaceData.length > 0) {
             dispatch(setActiveWorkspace(workspaceData[0].workspaceId));
+            dispatch(setActivePage(""));
             navigate(`workspace/${workspaceData[0].workspaceId}`);
           }
         } else {

@@ -26,7 +26,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Loader from "./Loader";
-import { updateData } from "../firebase/firebaseServices";
+import { getAllById, updateData } from "../firebase/firebaseServices";
 import { useDispatch } from "react-redux";
 import { setActivePage } from "../utils/activePageSlice";
 
@@ -34,6 +34,7 @@ const Page = () => {
   const [data, setData] = React.useState();
   const [inputObject, setInputObject] = React.useState(null);
   const activeWorkspace = useSelector((state) => state.activeWorkspace);
+  const activePage = useSelector((state) => state.activePage);
   const [emoji, setEmoji] = React.useState("");
   const [banner, setBanner] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -120,17 +121,28 @@ const Page = () => {
       const docRef = await addDoc(collectionRef, data);
       const docId = docRef.id;
 
-      const updatedData = {
-        ...data,
-        parentId: "",
-        createdAt: serverTimestamp(),
-      };
+      if (!activePage) {
+        const updatedData = {
+          ...data,
+          parentId: data.parentId || activePage,
+          createdAt: serverTimestamp(),
+        };
 
-      await updateDoc(doc(collectionRef, docId), updatedData);
+        await updateDoc(doc(collectionRef, docId), updatedData);
+        navigate(`/landing-page/page/${docId}`);
 
-      navigate(`/landing-page/page/${docId}`);
+        return updatedData;
+      } else {
+        const updatedData = {
+          ...data,
+          parentId: data.parentId || activePage,
+          createdAt: serverTimestamp(),
+        };
 
-      return updatedData;
+        await updateDoc(doc(collectionRef, docId), updatedData);
+        navigate(`/landing-page/page/${docId}`);
+        return updatedData;
+      }
     } catch (error) {
       console.error(`Error creating ${tableName} data:`, error);
       throw error;
@@ -151,10 +163,8 @@ const Page = () => {
         children: [],
       };
 
-      console.log("data", data);
-
       await createDataWithId(data, "pages");
-
+      console.log(activePage);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -172,21 +182,31 @@ const Page = () => {
           headerEmoji: emoji,
           banner: banner,
           pageTitle: title,
-          parentId: "",
         };
         await updateData("pages", pageId, data);
-
         console.log("Autosaved!");
       } catch (error) {
         console.error(error);
       }
+    }
+    const result = await getAllById("pages", "workspaceId", activeWorkspace);
+    let pid = result
+      .filter((page) => page.pagesId === activePage)
+      .map((page) => page.parentId);
+
+    let parentPage = result.filter((page) => page.pagesId === pid[0]);
+    if (parentPage[0]?.childPages?.indexOf(activePage) === -1) {
+      parentPage[0]?.childPages?.push(activePage);
+    }
+    if (parentPage.length > 0) {
+      await updateData("pages", pid[0], parentPage[0]);
     }
   };
 
   const resetAutosaveTimeout = () => {
     clearTimeout(autosaveTimeoutRef.current);
 
-    autosaveTimeoutRef.current = setTimeout(autosave, 5000);
+    autosaveTimeoutRef.current = setTimeout(autosave, 3000);
   };
 
   React.useEffect(() => {

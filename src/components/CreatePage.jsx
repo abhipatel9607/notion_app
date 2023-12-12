@@ -23,6 +23,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import { useSelector } from "react-redux";
+import { getAllById } from "../firebase/firebaseServices";
 
 const CreatePage = () => {
   const [inputObject, setInputObject] = React.useState(null);
@@ -51,12 +52,11 @@ const CreatePage = () => {
           headerEmoji: emoji,
           banner: banner,
           pageTitle: title,
-          parentId: activePage,
           childPages: [],
           children: [],
         };
         await createDataWithId(data, "pages");
-
+        console.log(activePage);
         console.log("Autosaved!");
       } catch (error) {
         console.error(error);
@@ -67,7 +67,7 @@ const CreatePage = () => {
   const resetAutosaveTimeout = () => {
     clearTimeout(autosaveTimeoutRef.current);
 
-    autosaveTimeoutRef.current = setTimeout(autosave, 5000);
+    autosaveTimeoutRef.current = setTimeout(autosave, 3000);
   };
 
   React.useEffect(() => {
@@ -98,7 +98,7 @@ const CreatePage = () => {
       if (!activePage) {
         const updatedData = {
           ...data,
-          parentId: "",
+          parentId: data.parentId || activePage,
           createdAt: serverTimestamp(),
         };
 
@@ -109,13 +109,12 @@ const CreatePage = () => {
       } else {
         const updatedData = {
           ...data,
-          parentId: activePage,
+          parentId: data.parentId || activePage,
           createdAt: serverTimestamp(),
         };
 
         await updateDoc(doc(collectionRef, docId), updatedData);
         navigate(`/landing-page/page/${docId}`);
-
         return updatedData;
       }
     } catch (error) {
@@ -156,14 +155,11 @@ const CreatePage = () => {
         headerEmoji: emoji,
         banner: banner,
         pageTitle: title,
-        parentId: "",
         childPages: [],
         children: [],
       };
-
-      console.log("data", data);
-
       await createDataWithId(data, "pages");
+      // const result = await getAllById("pages", "workspaceId", activeWorkspace);
 
       setLoading(false);
     } catch (error) {
