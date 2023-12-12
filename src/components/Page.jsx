@@ -78,7 +78,7 @@ const Page = () => {
   }));
 
   React.useEffect(() => {
-    if (!isInserted && intialBlockId) {
+    if (intialBlockId) {
       editor.insertBlocks(blocksToInsert, intialBlockId, "before");
       setIsInserted(true);
     }
@@ -302,7 +302,7 @@ const Page = () => {
             }}
           />
 
-          <BlockNoteView key={pageId} editor={editor} theme={"light"} />
+          <BlockNoteView key={activePage} editor={editor} theme={"light"} />
         </div>
       </div>
     </>

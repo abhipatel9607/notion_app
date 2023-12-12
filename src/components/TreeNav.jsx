@@ -24,6 +24,7 @@ const TreeNav = ({ node }) => {
     setIsExpanded(!isExpanded);
   };
   const navigateToPage = (pageId) => {
+    localStorage.setItem("currentPath", "page/" + pageId);
     navigate("page/" + pageId);
   };
 

@@ -25,7 +25,6 @@ const SideNavBar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  console.log(location.pathname);
   // Inside your component
   const handleActiveWorkspace = (id) => {
     setIsDropdownOpen(false);
@@ -48,6 +47,8 @@ const SideNavBar = () => {
 
   const handleLogout = async () => {
     try {
+      localStorage.removeItem("activeWorkspaceId");
+      localStorage.removeItem("currentPath");
       await logOut();
     } catch (error) {
       console.error(error);
@@ -96,7 +97,6 @@ const SideNavBar = () => {
           dispatch(setWorkspace(workspaceData));
           const lsActiveWorkspaceId = localStorage.getItem("activeWorkspaceId");
           if (lsActiveWorkspaceId) {
-            console.log("yes");
             const notionPath = localStorage.getItem("currentPath");
             dispatch(setActiveWorkspace(lsActiveWorkspaceId));
             dispatch(setActivePage(""));
