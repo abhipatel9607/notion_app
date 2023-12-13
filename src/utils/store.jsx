@@ -5,6 +5,7 @@ import appSlice from "./appSlice";
 import workspaceSlice from "./workspaceSlice";
 import activeWorkspaceSlice from "./activeWorkspaceSlice";
 import activePageSlice from "./activePageSlice";
+import activeParentSlice from "./activeParentSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     workspace: workspaceSlice,
     activeWorkspace: activeWorkspaceSlice,
     activePage: activePageSlice,
+    activeParentId: activeParentSlice,
   },
 });
 

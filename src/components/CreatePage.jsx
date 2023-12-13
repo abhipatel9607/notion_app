@@ -44,6 +44,7 @@ const CreatePage = () => {
   const autosave = async () => {
     if (title) {
       try {
+        inputObject.pop();
         const data = {
           workspaceId: activeWorkspace,
           content: JSON.stringify(inputObject),
@@ -64,7 +65,7 @@ const CreatePage = () => {
   const resetAutosaveTimeout = () => {
     clearTimeout(autosaveTimeoutRef.current);
 
-    autosaveTimeoutRef.current = setTimeout(autosave, 3000);
+    autosaveTimeoutRef.current = setTimeout(autosave, 1000);
   };
 
   React.useEffect(() => {

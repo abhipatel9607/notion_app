@@ -82,7 +82,11 @@ const Page = () => {
     }));
 
     if (intialBlockId) {
-      editor.insertBlocks(blocksToInsert, intialBlockId, "after");
+      let blocks = editor.topLevelBlocks;
+      if (blocks) {
+        editor.replaceBlocks(blocks, blocksToInsert);
+      }
+      // editor.insertBlocks(blocksToInsert, intialBlockId, "after");
     }
   }, [fetchedEditorObject, intialBlockId]);
 
@@ -118,15 +122,12 @@ const Page = () => {
       existingBlockIds.length > 0 &&
       existingBlockIds[0] !== "initialBlockId"
     ) {
-
-      if(existingBlockIds.length > 1){
+      if (existingBlockIds.length > 1) {
         console.log(existingBlockIds.length);
-        editor.removeBlocks(existingBlockIds.slice(1))
+        editor.removeBlocks(existingBlockIds.slice(1));
       }
-      
+
       // editor.removeBlocks(newArray);
-
-
     }
   };
 

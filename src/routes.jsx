@@ -59,6 +59,7 @@ const appRouter = createBrowserRouter([
             <Page />
           </Protected>
         ),
+        // key: window.location.href,
       },
     ],
   },
