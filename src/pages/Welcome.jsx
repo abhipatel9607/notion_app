@@ -5,18 +5,14 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import hero_img from "../assets/home-hero.webp";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../firebase/authContext";
-import { useEffect } from "react";
 
 function Welcome() {
   const { user } = UserAuth();
   const navigate = useNavigate();
+  if (user !== null) {
+    navigate("/landing-page");
+  }
 
-  // Redirect to the Landing page if the user is already authenticated
-  useEffect(() => {
-    if (user != null) {
-      navigate("/landing-page");
-    }
-  }, [navigate, user]);
   return (
     <div className="hero_section">
       <h1 className="heading_one ">Write, plan, share.</h1>
