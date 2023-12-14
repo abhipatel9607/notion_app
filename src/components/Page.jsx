@@ -11,63 +11,60 @@ import { useParams } from "react-router-dom";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { Button, TextField } from "@mui/material";
 import { HiOutlineDocumentAdd } from "react-icons/hi";
-import { db } from "../firebase/firebaseConfig";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  updateDoc,
-  serverTimestamp,
-} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Loader from "./Loader";
 import { getAllById, updateData } from "../firebase/firebaseServices";
 import { useDispatch } from "react-redux";
 import { setActivePage } from "../utils/activePageSlice";
+import { useGetPagesQuery } from "../utils/getPagesQuery";
 
 const Page = () => {
-  const [data, setData] = React.useState();
+  const [pageData, setPageData] = React.useState();
   const [inputObject, setInputObject] = React.useState(null);
   const activeWorkspace = useSelector((state) => state.activeWorkspace);
   const activePage = useSelector((state) => state.activePage);
   const [emoji, setEmoji] = React.useState("");
   const [banner, setBanner] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [fetchedEditorObject, setFetchedEditorObject] = React.useState();
   const [intialBlockId, setInitialBlockId] = React.useState();
-  const [isInserted, setIsInserted] = React.useState(false);
   const navigate = useNavigate();
   const [loader, setLoader] = React.useState(true);
   const dispatch = useDispatch();
 
   const { pageId } = useParams();
+  console.log(pageId);
+
+  const { data } = useGetPagesQuery(pageId);
 
   React.useEffect(() => {
-    const fetchData = async () => {
-      const pagesRef = doc(db, "pages", pageId);
+    if (data) {
+      setPageData(data);
+      setEmoji(data?.headerEmoji);
+      setBanner(data?.banner);
+      setTitle(data?.pageTitle);
 
       try {
-        const pagesDoc = await getDoc(pagesRef);
-        setData(pagesDoc.data());
-        setEmoji(pagesDoc.data()?.headerEmoji);
-        setBanner(pagesDoc.data()?.banner);
-        setTitle(pagesDoc.data()?.pageTitle);
-        setFetchedEditorObject(JSON.parse(pagesDoc.data()?.content));
+        let parsedContent;
 
-        const blocks = editor.topLevelBlocks;
-        setInitialBlockId(blocks[0].id);
-        setLoader(false);
+        if (data.content === undefined) {
+          parsedContent = null;
+        } else {
+          parsedContent = JSON.parse(data.content);
+        }
+
+        setFetchedEditorObject(parsedContent);
       } catch (error) {
-        console.error("Error getting document:", error);
+        console.error("Error parsing content:", error);
       }
-    };
 
-    fetchData();
-    dispatch(setActivePage(pageId));
-  }, [pageId]);
+      const blocks = editor.topLevelBlocks;
+      setInitialBlockId(blocks[0].id);
+      setLoader(false);
+      dispatch(setActivePage(pageId));
+    }
+  }, [pageId, pageData, data]);
 
   React.useEffect(() => {
     // Cleanup blocks when fetched editor content changes

@@ -14,11 +14,17 @@
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const TreeNav = ({ node }) => {
+  
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
+
+  const params = useParams();
+  if (params.workspaceId) {
+    localStorage.setItem("activeWorkspaceId", params.workspaceId);
+  }
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);

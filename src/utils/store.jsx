@@ -6,6 +6,7 @@ import workspaceSlice from "./workspaceSlice";
 import activeWorkspaceSlice from "./activeWorkspaceSlice";
 import activePageSlice from "./activePageSlice";
 import activeParentSlice from "./activeParentSlice";
+import { pagesApi } from "./getPagesQuery";
 
 const store = configureStore({
   reducer: {
@@ -14,7 +15,12 @@ const store = configureStore({
     activeWorkspace: activeWorkspaceSlice,
     activePage: activePageSlice,
     activeParentId: activeParentSlice,
+    [pagesApi.reducerPath]: pagesApi.reducer,
+
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(pagesApi.middleware, ),
 });
 
 export default store;
+
