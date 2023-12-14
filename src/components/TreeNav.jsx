@@ -10,7 +10,6 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useNavigate, useParams } from "react-router-dom";
 
 const TreeNav = ({ node }) => {
-  
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
 
@@ -39,7 +38,7 @@ const TreeNav = ({ node }) => {
           <KeyboardArrowRightIcon sx={{ color: "grey" }} />
         )}
         <span onClick={() => navigateToPage(node.pagesId)}>
-          {node.pageTitle}
+          {node.pageTitle || "Untitled"}
         </span>
       </div>
       {isExpanded && node.children && node.children.length > 0 && (

@@ -13,6 +13,8 @@ import { setWorkspace } from "../utils/workspaceSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import { setActiveWorkspace } from "../utils/activeWorkspaceSlice";
 import { setActivePage } from "../utils/activePageSlice";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
 
 const SideNavBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -33,9 +35,38 @@ const SideNavBar = () => {
     localStorage.setItem("currentPath", location.pathname);
     dispatch(setActivePage(""));
     localStorage.setItem("activePageId", "");
-    navigate(`workspace/${id}`);
   };
-
+  const addPage = async () => {
+    try {
+      const data = {
+        workspaceId: localStorage.getItem("activeWorkspaceId"),
+        content: JSON.stringify(null),
+        headerEmoji: "",
+        banner: "",
+        pageTitle: "",
+        parentId: "",
+        childPages: [],
+        children: [],
+        createdAt: serverTimestamp(),
+      };
+      await createDataWithId(data, "pages");
+      console.log("Autosaved!");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const createDataWithId = async (data, tableName) => {
+    try {
+      const collectionRef = collection(db, tableName);
+      const docRef = await addDoc(collectionRef, data);
+      const docId = docRef.id;
+      navigate(`/landing-page/page/${docId}`);
+      return data;
+    } catch (error) {
+      console.error(`Error creating ${tableName} data:`, error);
+      throw error;
+    }
+  };
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
@@ -87,7 +118,7 @@ const SideNavBar = () => {
       }
     };
     fetchData();
-  }, [activeWorkspace, activePage]);
+  }, [activeWorkspace, activePage, data]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -212,6 +243,13 @@ const SideNavBar = () => {
         <div className="text-gray-700 block px-4 py-2 font-bold mt-4 text-sm">
           {workspace.length > 1 ? "Pages:" : "Pages:"}
         </div>
+        <button
+          className="bg-gray-300 hover:bg-gray-400 text-gray-700 ml-2 mt-2 mb-2 py-1 
+        px-4 w-[80%] rounded"
+          onClick={() => addPage()}
+        >
+          Create New Page
+        </button>
         <CollapsibleTree data={data}></CollapsibleTree>
         <div
           className="opacity-0 group-hover/sidebar:opacity-100 transition 

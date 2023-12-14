@@ -9,6 +9,7 @@ import { setActiveWorkspace } from "../utils/activeWorkspaceSlice";
 import { useDispatch } from "react-redux";
 import LoadingButton from "@mui/lab/LoadingButton";
 import ArticleIcon from "@mui/icons-material/Article";
+import { setActivePage } from "../utils/activePageSlice";
 
 function CreateNewWorkspace() {
   const [newWorkspaceTitle, setNewWorkspaceTitle] = useState("");
@@ -29,6 +30,8 @@ function CreateNewWorkspace() {
       const createdWorkspaceData = await createData(data, "workspace");
       dispatch(setActiveWorkspace(createdWorkspaceData.id));
       localStorage.setItem("activeWorkspaceId", createdWorkspaceData.id);
+      dispatch(setActivePage(""));
+      localStorage.setItem("activePageId", "");
       localStorage.setItem(
         "currentPath",
         "workspace/" + createdWorkspaceData.id

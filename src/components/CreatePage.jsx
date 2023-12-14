@@ -42,30 +42,28 @@ const CreatePage = () => {
   const autosaveTimeoutRef = React.useRef(null);
 
   const autosave = async () => {
-    if (title) {
-      try {
-        inputObject.pop();
-        const data = {
-          workspaceId: activeWorkspace,
-          content: JSON.stringify(inputObject),
-          headerEmoji: emoji,
-          banner: banner,
-          pageTitle: title,
-          childPages: [],
-          children: [],
-        };
-        await createDataWithId(data, "pages");
-        console.log("Autosaved!");
-      } catch (error) {
-        console.error(error);
-      }
+    try {
+      inputObject.pop();
+      const data = {
+        workspaceId: activeWorkspace,
+        content: JSON.stringify(inputObject),
+        headerEmoji: emoji,
+        banner: banner,
+        pageTitle: title,
+        childPages: [],
+        children: [],
+      };
+      await createDataWithId(data, "pages");
+      console.log("Autosaved!");
+    } catch (error) {
+      console.error(error);
     }
   };
 
   const resetAutosaveTimeout = () => {
     clearTimeout(autosaveTimeoutRef.current);
 
-    autosaveTimeoutRef.current = setTimeout(autosave, 1000);
+    autosaveTimeoutRef.current = setTimeout(autosave, 500);
   };
 
   React.useEffect(() => {
@@ -79,12 +77,9 @@ const CreatePage = () => {
     };
 
     document.addEventListener("keydown", resetTimeoutOnUserActivity);
-    document.addEventListener("mousemove", resetTimeoutOnUserActivity);
-
     return () => {
       clearTimeout(autosaveTimeoutRef.current);
       document.removeEventListener("keydown", resetTimeoutOnUserActivity);
-      document.removeEventListener("mousemove", resetTimeoutOnUserActivity);
     };
   }, [resetAutosaveTimeout]);
 

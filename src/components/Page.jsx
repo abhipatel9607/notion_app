@@ -18,9 +18,11 @@ import { getAllById, updateData } from "../firebase/firebaseServices";
 import { useDispatch } from "react-redux";
 import { setActivePage } from "../utils/activePageSlice";
 import { useGetPagesQuery } from "../utils/getPagesQuery";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
 
 const Page = () => {
-  const [pageData, setPageData] = React.useState();
+  const [data, setData] = React.useState();
   const [inputObject, setInputObject] = React.useState(null);
   const activeWorkspace = useSelector((state) => state.activeWorkspace);
   const activePage = useSelector((state) => state.activePage);
@@ -34,37 +36,29 @@ const Page = () => {
   const dispatch = useDispatch();
 
   const { pageId } = useParams();
-  console.log(pageId);
-
-  const { data } = useGetPagesQuery(pageId);
-
+  dispatch(setActivePage(pageId));
   React.useEffect(() => {
-    if (data) {
-      setPageData(data);
-      setEmoji(data?.headerEmoji);
-      setBanner(data?.banner);
-      setTitle(data?.pageTitle);
+    const fetchData = async () => {
+      const pagesRef = doc(db, "pages", pageId);
 
       try {
-        let parsedContent;
+        const pagesDoc = await getDoc(pagesRef);
+        setData(pagesDoc.data());
+        setEmoji(pagesDoc.data()?.headerEmoji);
+        setBanner(pagesDoc.data()?.banner);
+        setTitle(pagesDoc.data()?.pageTitle);
+        setFetchedEditorObject(JSON.parse(pagesDoc.data()?.content));
 
-        if (data.content === undefined) {
-          parsedContent = null;
-        } else {
-          parsedContent = JSON.parse(data.content);
-        }
-
-        setFetchedEditorObject(parsedContent);
+        const blocks = editor.topLevelBlocks;
+        setInitialBlockId(blocks[0].id);
+        setLoader(false);
       } catch (error) {
-        console.error("Error parsing content:", error);
+        console.error("Error getting document:", error);
       }
+    };
 
-      const blocks = editor.topLevelBlocks;
-      setInitialBlockId(blocks[0].id);
-      setLoader(false);
-      dispatch(setActivePage(pageId));
-    }
-  }, [pageId, pageData, data]);
+    fetchData();
+  }, [pageId]);
 
   React.useEffect(() => {
     // Cleanup blocks when fetched editor content changes
@@ -80,8 +74,10 @@ const Page = () => {
 
     if (intialBlockId) {
       let blocks = editor.topLevelBlocks;
-      if (blocks) {
+      if (blocks && blocksToInsert) {
         editor.replaceBlocks(blocks, blocksToInsert);
+      } else if (blocks) {
+        editor.replaceBlocks(blocks, []);
       }
       // editor.insertBlocks(blocksToInsert, intialBlockId, "after");
     }
@@ -136,20 +132,18 @@ const Page = () => {
   const autosaveTimeoutRef = React.useRef(null);
 
   const autosave = async () => {
-    if (title) {
-      try {
-        const data = {
-          workspaceId: activeWorkspace,
-          content: JSON.stringify(inputObject),
-          headerEmoji: emoji,
-          banner: banner,
-          pageTitle: title,
-        };
-        await updateData("pages", pageId, data);
-        console.log("Autosaved!");
-      } catch (error) {
-        console.error(error);
-      }
+    try {
+      const data = {
+        workspaceId: activeWorkspace,
+        content: JSON.stringify(inputObject),
+        headerEmoji: emoji,
+        banner: banner,
+        pageTitle: title,
+      };
+      await updateData("pages", pageId, data);
+      console.log("Autosaved!");
+    } catch (error) {
+      console.error(error);
     }
     const result = await getAllById("pages", "workspaceId", activeWorkspace);
     let pid = result
@@ -183,12 +177,10 @@ const Page = () => {
     };
 
     document.addEventListener("keydown", resetTimeoutOnUserActivity);
-    document.addEventListener("mousemove", resetTimeoutOnUserActivity);
 
     return () => {
       clearTimeout(autosaveTimeoutRef.current);
       document.removeEventListener("keydown", resetTimeoutOnUserActivity);
-      document.removeEventListener("mousemove", resetTimeoutOnUserActivity);
     };
   }, [resetAutosaveTimeout]);
 
