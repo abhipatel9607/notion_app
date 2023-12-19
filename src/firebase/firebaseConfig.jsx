@@ -5,13 +5,13 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "@firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB06TUtziiIIs9b5yBzqvW4AO_YXoVSDPI",
-  authDomain: "notion-app-69b72.firebaseapp.com",
-  projectId: "notion-app-69b72",
-  storageBucket: "notion-app-69b72.appspot.com",
-  messagingSenderId: "852112069093",
-  appId: "1:852112069093:web:471c04369bfee550765f0c",
-  measurementId: "G-SHZGT37JNY",
+  apiKey: "AIzaSyC6vGr8XbsxP6i15q_9uPPM5QKBuLO4iR0",
+  authDomain: "notion-app-7f185.firebaseapp.com",
+  projectId: "notion-app-7f185",
+  storageBucket: "notion-app-7f185.appspot.com",
+  messagingSenderId: "146997784571",
+  appId: "1:146997784571:web:09733688e4c5938ae9255e",
+  measurementId: "G-SVRQ41C161",
 };
 
 // Initialize Firebase
